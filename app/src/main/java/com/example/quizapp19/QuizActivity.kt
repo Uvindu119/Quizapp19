@@ -165,8 +165,8 @@ class QuizActivity : AppCompatActivity() {
     }
     private fun finishQuiz() {
         val intent = Intent(this, ResultsActivity::class.java)
-        intent.putExtra("correctAnswers", correctAnswers*2)
-        intent.putExtra("totalQuestions", questions.size*2)
+        intent.putExtra("scores", correctAnswers*2)
+        intent.putExtra("of total", questions.size*2)
         intent.putStringArrayListExtra("incorrectAnswers", incorrectAnswers)
         startActivity(intent)
         finish()
