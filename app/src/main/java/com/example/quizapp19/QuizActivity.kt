@@ -55,7 +55,7 @@ class QuizActivity : AppCompatActivity() {
         submitButton = findViewById(R.id.submitButton)
         timerTextView = findViewById(R.id.timerTextView)
 
-
+        val questionSet = intent.getIntExtra("questionSet", Random.nextInt(1, totalQuestionSets + 1))
         val dbHelper = QuizDatabaseHelper(this)
         questions = dbHelper.getQuestionsBySet(questionSet)
         displayQuestion()
@@ -234,6 +234,7 @@ class QuizActivity : AppCompatActivity() {
         intent.putExtra("correctAnswers", correctAnswers)
         intent.putExtra("totalQuestions", questions.size*2 )
         intent.putStringArrayListExtra("incorrectAnswers", incorrectAnswers)
+        intent.putExtra("questionSet", questionSet)
         startActivity(intent)
         finish()
         quizTimer.cancel()

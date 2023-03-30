@@ -67,6 +67,8 @@ class ResultsActivity : AppCompatActivity() {
         }
         restartButton.setOnClickListener {
             val intent = Intent(this, QuizActivity::class.java)
+            val questionSet = getIntent().getIntExtra("questionSet",1)
+            intent.putExtra("questionSet", questionSet)
             startActivity(intent)
             finish()
         }
