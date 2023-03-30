@@ -4,5 +4,6 @@
     <string name="previous">Previous</string>
     <string name="score_text">You scored %1$d out of %2$d.</string>
     <string name="incorrect_answers_text">Incorrect Answers:\n\n%1$s</string>
+    <string name="grade_text">Grade</string>
     <!-- Add more strings as needed -->
 </resources>

@@ -24,6 +24,15 @@
             android:textSize="48sp" />
 
         <TextView
+            android:id="@+id/gradeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@android:color/black"
+            android:textSize="24sp" />
+
+
+        <TextView
             android:id="@+id/incorrectAnswersTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
