@@ -21,6 +21,10 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         private const val COLUMN_OPTION_4 = "option_4"
         private const val COLUMN_CORRECT_ANSWER = "correct_answer"
         private const val COLUMN_SET_NUMBER = "set_number"
+        private const val TABLE_CATEGORIES = "categories"
+        private const val COLUMN_CATEGORY_ID = "id"
+        private const val COLUMN_CATEGORY_NAME = "name"
+
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
@@ -34,12 +38,62 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
                 $COLUMN_OPTION_4 TEXT,
                 $COLUMN_CORRECT_ANSWER INTEGER,
                 $COLUMN_IMAGE_PATH TEXT,
-                $COLUMN_SET_NUMBER INTEGER
+                $COLUMN_SET_NUMBER INTEGER,
+                $COLUMN_CATEGORY_ID INTEGER,
+                FOREIGN KEY($COLUMN_CATEGORY_ID) REFERENCES $TABLE_CATEGORIES($COLUMN_CATEGORY_ID)
+            )
+        """.trimIndent()
+
+        val createCategoriesTableSQL = """
+            CREATE TABLE $TABLE_CATEGORIES (
+                $COLUMN_CATEGORY_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                $COLUMN_CATEGORY_NAME TEXT
             )
         """.trimIndent()
 
         db?.execSQL(createTableSQL)
+        db?.execSQL(createCategoriesTableSQL)
         insertSampleQuestions(db) // Insert sample questions
+        insertSampleCategories(db)
+    }
+
+    private fun insertSampleCategories(db: SQLiteDatabase?) {
+        val sampleCategories = listOf(
+            Category("General Knowledge"),
+            Category("Mathematics"),
+            Category("Science"),
+            Category("History")
+        )
+        sampleCategories.forEach { category ->
+            val contentValues = ContentValues().apply {
+                put(COLUMN_CATEGORY_NAME, category.name)
+            }
+            db?.insert(TABLE_CATEGORIES, null, contentValues)
+        }
+    }
+    fun getCategories(): List<Category> {
+        val categories = mutableListOf<Category>()
+
+        val cursor = readableDatabase.rawQuery("SELECT * FROM $TABLE_CATEGORIES", null)
+
+        if (cursor.moveToFirst()) {
+            do {
+                val categoryIdIndex = cursor.getColumnIndex(COLUMN_CATEGORY_ID)
+                val categoryNameIndex = cursor.getColumnIndex(COLUMN_CATEGORY_NAME)
+
+                if (categoryIdIndex != -1 && categoryNameIndex != -1) {
+                    val categoryId = cursor.getInt(categoryIdIndex)
+                    val categoryName = cursor.getString(categoryNameIndex)
+
+                    val category = Category(categoryName)
+                    category.id = categoryId
+                    categories.add(category)
+                }
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        return categories
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) { if (oldVersion < 19 && newVersion >= 19) {
