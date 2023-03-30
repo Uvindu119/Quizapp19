@@ -42,12 +42,20 @@
             android:textColor="@color/background"
             android:textSize="24sp" />
 
+        <Button
+            android:id="@+id/nextPaperButton"
+            android:layout_width="match_parent"
+            android:layout_marginTop="48dp"
+            android:layout_height="wrap_content"
+            android:text="Next Paper"
+            android:textColor="@color/background"
+            android:background="@color/primaryVariant" />
 
         <Button
             android:id="@+id/restartButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="16dp"
             android:text="Restart Quiz"
             android:textColor="@color/background"
             android:background="@color/primaryVariant" />
