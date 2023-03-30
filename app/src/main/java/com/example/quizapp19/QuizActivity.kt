@@ -38,6 +38,7 @@ class QuizActivity : AppCompatActivity() {
     private var isQuizFinished = false
     private var scores = 0
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_quiz)
@@ -56,7 +57,7 @@ class QuizActivity : AppCompatActivity() {
         val dbHelper = QuizDatabaseHelper(this)
         questions = dbHelper.getAllQuestions()
         displayQuestion()
-        quizTimer = QuizTimer(1 * 60, { time ->
+        quizTimer = QuizTimer(2 * 60, { time ->
             timerTextView.text = time
         }, {
             isQuizFinished = true
