@@ -5,7 +5,8 @@ data class Question(
     val questionText: String,
     val options: List<String>,
     val correctAnswer: String,
-    val imagePath: String = ""
+    val imagePath: String = "",
+    val setNumber: Int
 ) {
     val option1: String
         get() = options[0]

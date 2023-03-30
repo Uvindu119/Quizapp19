@@ -13,7 +13,7 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import kotlin.math.abs
 import kotlinx.android.synthetic.main.activity_quiz.*
-
+import kotlin.random.Random
 class QuizActivity : AppCompatActivity() {
 
     private lateinit var questionText: TextView
@@ -37,7 +37,10 @@ class QuizActivity : AppCompatActivity() {
     private var isActivityActive = false
     private var isQuizFinished = false
     private var scores = 0
+    private val answeredQuestions = mutableSetOf<Int>()
 
+    private val totalQuestionSets = 3
+    private val questionSet = Random.nextInt(1, totalQuestionSets + 1)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +58,7 @@ class QuizActivity : AppCompatActivity() {
 
 
         val dbHelper = QuizDatabaseHelper(this)
-        questions = dbHelper.getAllQuestions()
+        questions = dbHelper.getQuestionsBySet(questionSet)
         displayQuestion()
         quizTimer = QuizTimer(2 * 60, { time ->
             timerTextView.text = time
@@ -78,6 +81,7 @@ class QuizActivity : AppCompatActivity() {
             }
 
             totalQuestions++
+            answeredQuestions.add(currentQuestionIndex)
             val selectedOption = findViewById<RadioButton>(selectedOptionId)
             val selectedAnswer = selectedOption.text.toString()
             val correctAnswer = questions[currentQuestionIndex].correctAnswer
@@ -140,7 +144,11 @@ class QuizActivity : AppCompatActivity() {
         option3.text = shuffledOptions[2]
         option4.text = shuffledOptions[3]
         optionsGroup.clearCheck()
-        submitButton.visibility = View.VISIBLE
+        if (answeredQuestions.contains(currentQuestionIndex)) {
+            submitButton.visibility = View.GONE
+        } else {
+            submitButton.visibility = View.VISIBLE
+        }
     }
     private inner class GestureListener : GestureDetector.SimpleOnGestureListener() {
         private val SWIPE_THRESHOLD = 100
