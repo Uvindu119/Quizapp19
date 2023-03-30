@@ -219,12 +219,12 @@ class QuizActivity : AppCompatActivity() {
         }
 
         // Calculate the final score
-        val finalScore = correctAnswers * 2
+
 
         // Start the results activity
         val intent = Intent(this, ResultsActivity::class.java)
-        intent.putExtra("correctAnswers", correctAnswers * 2)
-        intent.putExtra("totalQuestions", questions.size * 2)
+        intent.putExtra("correctAnswers", correctAnswers)
+        intent.putExtra("totalQuestions", questions.size*2 )
         intent.putStringArrayListExtra("incorrectAnswers", incorrectAnswers)
         startActivity(intent)
         finish()

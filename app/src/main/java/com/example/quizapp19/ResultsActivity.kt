@@ -27,7 +27,7 @@ class ResultsActivity : AppCompatActivity() {
         val totalQuestions = intent.getIntExtra("totalQuestions", 0)
         val incorrectAnswers = intent.getStringArrayListExtra("incorrectAnswers") ?: arrayListOf()
 
-        val score = correctAnswers * 2
+        val score = correctAnswers*2
         scoreTextView.text = getString(R.string.score_text, score, totalQuestions)
 
         if (score > 16) {

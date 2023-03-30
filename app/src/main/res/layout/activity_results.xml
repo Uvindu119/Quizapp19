@@ -16,19 +16,20 @@
         >
 
         <TextView
-            android:id="@+id/scoreTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Score"
-            android:textColor="@color/background"
-            android:textSize="48sp" />
-
-        <TextView
             android:id="@+id/gradeTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
             android:textColor="@android:color/black"
+            android:layout_gravity="center_horizontal"
+            android:textSize="48sp" />
+
+        <TextView
+            android:id="@+id/scoreTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Score"
+            android:textColor="@color/background"
             android:textSize="24sp" />
 
 
