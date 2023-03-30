@@ -8,6 +8,10 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
+import androidx.core.view.GestureDetectorCompat
+import android.view.GestureDetector
+import android.view.MotionEvent
+import kotlin.math.abs
 import kotlinx.android.synthetic.main.activity_quiz.*
 
 class QuizActivity : AppCompatActivity() {
@@ -22,6 +26,7 @@ class QuizActivity : AppCompatActivity() {
     private lateinit var questionImage: ImageView
     private lateinit var quizTimer: QuizTimer
     private lateinit var timerTextView: TextView
+    private lateinit var gestureDetector: GestureDetectorCompat
 
 
     private var currentQuestionIndex = 0
@@ -36,7 +41,7 @@ class QuizActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_quiz)
-
+        gestureDetector = GestureDetectorCompat(this@QuizActivity, GestureListener())
         questionText = findViewById(R.id.questionTextView)
         questionImage = findViewById(R.id.questionImageView)
         optionsGroup = findViewById(R.id.optionsRadioGroup)
@@ -113,6 +118,10 @@ class QuizActivity : AppCompatActivity() {
         quizTimer.cancel()
     }
 
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        gestureDetector.onTouchEvent(ev)
+        return super.dispatchTouchEvent(ev)
+    }
 
     private fun displayQuestion() {
         val question = questions[currentQuestionIndex]
@@ -131,6 +140,45 @@ class QuizActivity : AppCompatActivity() {
         option4.text = shuffledOptions[3]
         optionsGroup.clearCheck()
         submitButton.visibility = View.VISIBLE
+    }
+    private inner class GestureListener : GestureDetector.SimpleOnGestureListener() {
+        private val SWIPE_THRESHOLD = 100
+        private val SWIPE_VELOCITY_THRESHOLD = 100
+
+        override fun onFling(e1: MotionEvent?, e2: MotionEvent?, velocityX: Float, velocityY: Float): Boolean {
+            var result = false
+            try {
+                val diffY = e2!!.y - e1!!.y
+                val diffX = e2.x - e1.x
+                if (abs(diffX) > abs(diffY)) {
+                    if (abs(diffX) > SWIPE_THRESHOLD && abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                        if (diffX > 0) {
+                            onSwipeRight()
+                        } else {
+                            onSwipeLeft()
+                        }
+                        result = true
+                    }
+                }
+            } catch (exception: Exception) {
+                exception.printStackTrace()
+            }
+            return result
+        }
+    }
+
+    private fun onSwipeRight() {
+        if (currentQuestionIndex > 0) {
+            currentQuestionIndex--
+            displayQuestion()
+        }
+    }
+
+    private fun onSwipeLeft() {
+        if (currentQuestionIndex < questions.size - 1) {
+            currentQuestionIndex++
+            displayQuestion()
+        }
     }
 
     private fun showQuizSummary() {
@@ -164,9 +212,19 @@ class QuizActivity : AppCompatActivity() {
             .show()
     }
     private fun finishQuiz() {
+        // Check if all questions have been answered
+        if (totalQuestions < questions.size) {
+            Snackbar.make(findViewById(android.R.id.content), "Please answer all questions.", Snackbar.LENGTH_SHORT).show()
+            return
+        }
+
+        // Calculate the final score
+        val finalScore = correctAnswers * 2
+
+        // Start the results activity
         val intent = Intent(this, ResultsActivity::class.java)
-        intent.putExtra("scores", correctAnswers*2)
-        intent.putExtra("of total", questions.size*2)
+        intent.putExtra("correctAnswers", correctAnswers * 2)
+        intent.putExtra("totalQuestions", questions.size * 2)
         intent.putStringArrayListExtra("incorrectAnswers", incorrectAnswers)
         startActivity(intent)
         finish()
