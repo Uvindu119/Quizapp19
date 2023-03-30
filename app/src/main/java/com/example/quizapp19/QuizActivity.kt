@@ -23,6 +23,7 @@ class QuizActivity : AppCompatActivity() {
     private lateinit var quizTimer: QuizTimer
     private lateinit var timerTextView: TextView
 
+
     private var currentQuestionIndex = 0
     private lateinit var questions: List<Question>
     private var totalQuestions = 0
@@ -30,6 +31,7 @@ class QuizActivity : AppCompatActivity() {
     private val incorrectAnswers = arrayListOf<String>()
     private var isActivityActive = false
     private var isQuizFinished = false
+    private var scores = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +46,7 @@ class QuizActivity : AppCompatActivity() {
         option4 = findViewById(R.id.option4)
         submitButton = findViewById(R.id.submitButton)
         timerTextView = findViewById(R.id.timerTextView)
+
 
         val dbHelper = QuizDatabaseHelper(this)
         questions = dbHelper.getAllQuestions()
@@ -75,6 +78,7 @@ class QuizActivity : AppCompatActivity() {
             if (selectedAnswer == correctAnswer) {
                 correctAnswers++
 
+                scores += 2
             } else {
                 incorrectAnswers.add("Q: ${questions[currentQuestionIndex].questionText}\nA: $correctAnswer")
             }
@@ -133,8 +137,11 @@ class QuizActivity : AppCompatActivity() {
         // Cancel the timer to prevent further updates
         quizTimer.cancel()
 
+        // Calculate the total score
+        val totalScore = correctAnswers * 2
+
         // Create a summary message
-        val summaryMessage = "Quiz finished!\nYou scored $correctAnswers out of ${questions.size}."
+        val summaryMessage = "Time finished!\nYou scored $totalScore out of ${questions.size*2}."
 
         // Show an AlertDialog with the summary message and options to restart or exit
         AlertDialog.Builder(this)
@@ -158,12 +165,13 @@ class QuizActivity : AppCompatActivity() {
     }
     private fun finishQuiz() {
         val intent = Intent(this, ResultsActivity::class.java)
-        intent.putExtra("correctAnswers", correctAnswers)
-        intent.putExtra("totalQuestions", questions.size)
+        intent.putExtra("correctAnswers", correctAnswers*2)
+        intent.putExtra("totalQuestions", questions.size*2)
         intent.putStringArrayListExtra("incorrectAnswers", incorrectAnswers)
         startActivity(intent)
         finish()
         quizTimer.cancel()
     }
+
 }
 
