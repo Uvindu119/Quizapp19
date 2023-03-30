@@ -7,16 +7,4 @@ data class Question(
     val correctAnswer: String,
     val imagePath: String = "",
     val setNumber: Int
-) {
-    val option1: String
-        get() = options[0]
-
-    val option2: String
-        get() = options[1]
-
-    val option3: String
-        get() = options[2]
-
-    val option4: String
-        get() = options[3]
-}
+)
