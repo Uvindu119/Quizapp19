@@ -93,8 +93,11 @@ class QuizActivity : AppCompatActivity() {
             }
 
             currentQuestionIndex++
-            if (currentQuestionIndex >= questions.size) {
+            if (totalQuestions == questions.size) {
                 finishQuiz()
+            } else if (currentQuestionIndex >= questions.size) {
+                currentQuestionIndex = 0
+                displayQuestion()
             } else {
                 displayQuestion()
             }
