@@ -9,7 +9,7 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
 
     companion object {
         private const val DATABASE_NAME = "Quiz.db"
-        private const val DATABASE_VERSION = 24
+        private const val DATABASE_VERSION = 26
 
         private const val TABLE_NAME = "questions"
         private const val COLUMN_ID = "id"
@@ -45,7 +45,7 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
     """.trimIndent()
 
         val createCategoriesTableSQL = """
-        CREATE TABLE $TABLE_CATEGORIES (
+        CREATE TABLE IF NOT EXISTS $TABLE_CATEGORIES (
             $COLUMN_CATEGORY_ID INTEGER PRIMARY KEY AUTOINCREMENT,
             $COLUMN_CATEGORY_NAME TEXT
         )
@@ -71,32 +71,9 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
             db?.insert(TABLE_CATEGORIES, null, contentValues)
         }
     }
-    fun getCategories(): List<Category> {
-        val categories = mutableListOf<Category>()
 
-        val cursor = readableDatabase.rawQuery("SELECT * FROM $TABLE_CATEGORIES", null)
 
-        if (cursor.moveToFirst()) {
-            do {
-                val categoryIdIndex = cursor.getColumnIndex(COLUMN_CATEGORY_ID)
-                val categoryNameIndex = cursor.getColumnIndex(COLUMN_CATEGORY_NAME)
-
-                if (categoryIdIndex != -1 && categoryNameIndex != -1) {
-                    val categoryId = cursor.getInt(categoryIdIndex)
-                    val categoryName = cursor.getString(categoryNameIndex)
-
-                    val category = Category(categoryName)
-                    category.id = categoryId
-                    categories.add(category)
-                }
-            } while (cursor.moveToNext())
-        }
-
-        cursor.close()
-        return categories
-    }
-
-    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) { if (oldVersion < 24 && newVersion >= 24) {
+    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) { if (oldVersion < 26 && newVersion >= 26) {
         // Option 1: Drop the table and recreate it
         db?.execSQL("DROP TABLE IF EXISTS $TABLE_NAME")
         onCreate(db)
