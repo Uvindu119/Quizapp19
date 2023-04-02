@@ -33,17 +33,17 @@ class ResultsActivity : AppCompatActivity() {
         scoreTextView.text = getString(R.string.score_text, score, totalQuestions)
 
         val isQualifiedForNextPaper = when (score) {
-            in 17..totalQuestions -> {
+            in 9..totalQuestions -> {
                 gradeTextView.text = "A"
                 gradeTextView.setTextColor(resources.getColor(R.color.green))
                 true
             }
-            in 13..16 -> {
+            in 7..8 -> {
                 gradeTextView.text = "B"
                 gradeTextView.setTextColor(resources.getColor(R.color.light_green))
                 true
             }
-            in 9..12 -> {
+            in 4..6 -> {
                 gradeTextView.text = "C"
                 gradeTextView.setTextColor(resources.getColor(R.color.yellow))
                 true

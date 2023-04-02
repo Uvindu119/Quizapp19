@@ -11,7 +11,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Find the start button by its ID and set a click listener on it
         val startButton = findViewById<Button>(R.id.startButton)
         startButton.setOnClickListener {
             val intent = Intent(this, CategoryActivity::class.java)

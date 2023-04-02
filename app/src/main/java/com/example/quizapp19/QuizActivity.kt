@@ -240,10 +240,6 @@ class QuizActivity : AppCompatActivity() {
             return
         }
 
-        // Calculate the final score
-
-
-        // Start the results activity
         val intent = Intent(this, ResultsActivity::class.java)
         intent.putExtra("correctAnswers", correctAnswers)
         intent.putExtra("totalQuestions", questions.size*2 )
