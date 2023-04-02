@@ -9,7 +9,7 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
 
     companion object {
         private const val DATABASE_NAME = "Quiz.db"
-        private const val DATABASE_VERSION = 26
+        private const val DATABASE_VERSION = 27
 
         private const val TABLE_NAME = "questions"
         private const val COLUMN_ID = "id"
@@ -59,10 +59,10 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
 
     private fun insertSampleCategories(db: SQLiteDatabase?) {
         val sampleCategories = listOf(
-            Category("General Knowledge"),
-            Category("Mathematics"),
-            Category("Science"),
-            Category("History")
+            Category("General",1),
+            Category("Mathematics",2),
+            Category("Science",3),
+            Category("History",4)
         )
         sampleCategories.forEach { category ->
             val contentValues = ContentValues().apply {
@@ -73,7 +73,7 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
     }
 
 
-    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) { if (oldVersion < 26 && newVersion >= 26) {
+    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) { if (oldVersion < 27 && newVersion >= 27) {
         // Option 1: Drop the table and recreate it
         db?.execSQL("DROP TABLE IF EXISTS $TABLE_NAME")
         onCreate(db)
@@ -115,7 +115,24 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
             db?.insert(TABLE_NAME, null, contentValues)
         }
     }
-
+    fun getCategories(): List<Category> {
+        val categories = mutableListOf<Category>()
+        val cursor = readableDatabase.rawQuery("SELECT * FROM $TABLE_CATEGORIES", null)
+        if (cursor.moveToFirst()) {
+            do {
+                val idIndex = cursor.getColumnIndex(COLUMN_CATEGORY_ID)
+                val nameIndex = cursor.getColumnIndex(COLUMN_CATEGORY_NAME)
+                if (idIndex != -1 && nameIndex != -1) {
+                    val id = cursor.getString(idIndex).toInt() // Convert id to integer
+                    val name = cursor.getString(nameIndex)
+                    val category = Category(name, id)
+                    categories.add(category)
+                }
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return categories
+    }
     fun getQuestionsBySet(setNumber: Int, categoryId: Int): List<Question> {
         val questions = mutableListOf<Question>()
 

@@ -3,6 +3,7 @@ package com.example.quizapp19
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -133,27 +134,35 @@ class QuizActivity : AppCompatActivity() {
     }
 
     private fun displayQuestion() {
-        val question = questions[currentQuestionIndex]
-        questionText.text = question.questionText
-        if (question.imagePath.isNotBlank()) {
-            Picasso.get().load(question.imagePath).into(questionImageView)
-            questionImageView.visibility = View.VISIBLE
-        } else {
-            questionImageView.visibility = View.GONE
-        }
 
-        val shuffledOptions = question.options.shuffled()
-        option1.text = shuffledOptions[0]
-        option2.text = shuffledOptions[1]
-        option3.text = shuffledOptions[2]
-        option4.text = shuffledOptions[3]
-        optionsGroup.clearCheck()
-        if (answeredQuestions.contains(currentQuestionIndex)) {
-            submitButton.visibility = View.GONE
+        if (questions.isNotEmpty()) {
+            val question = questions[currentQuestionIndex]
+            questionText.text = question.questionText
+
+            if (question.imagePath.isNotBlank()) {
+                Picasso.get().load(question.imagePath).into(questionImageView)
+                questionImageView.visibility = View.VISIBLE
+            } else {
+                questionImageView.visibility = View.GONE
+            }
+
+            val shuffledOptions = question.options.shuffled()
+            option1.text = shuffledOptions[0]
+            option2.text = shuffledOptions[1]
+            option3.text = shuffledOptions[2]
+            option4.text = shuffledOptions[3]
+            optionsGroup.clearCheck()
+
+            if (answeredQuestions.contains(currentQuestionIndex)) {
+                submitButton.visibility = View.GONE
+            } else {
+                submitButton.visibility = View.VISIBLE
+            }
         } else {
-            submitButton.visibility = View.VISIBLE
+            Log.e("QuizActivity", "Questions list is empty")
         }
     }
+
     private inner class GestureListener : GestureDetector.SimpleOnGestureListener() {
         private val SWIPE_THRESHOLD = 100
         private val SWIPE_VELOCITY_THRESHOLD = 100

@@ -14,21 +14,17 @@ class CategoryActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var categoryList: List<Category>
+    private lateinit var dbHelper: QuizDatabaseHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_category)
+        dbHelper = QuizDatabaseHelper(this)
 
         recyclerView = findViewById(R.id.categoryRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        categoryList = listOf(
-            Category("General Knowledge"),
-            Category("Sports"),
-            Category("History"),
-            Category("Geography"),
-            Category("Science")
-        )
+        categoryList = dbHelper.getCategories()
 
         val categoryAdapter = CategoryAdapter(categoryList)
 
