@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 
 class ResultsActivity : AppCompatActivity() {
     private lateinit var scoreTextView: TextView
@@ -35,22 +36,22 @@ class ResultsActivity : AppCompatActivity() {
         val isQualifiedForNextPaper = when (score) {
             in 9..totalQuestions -> {
                 gradeTextView.text = "A"
-                gradeTextView.setTextColor(resources.getColor(R.color.green))
+                gradeTextView.setTextColor(ContextCompat.getColor(this, R.color.green))
                 true
             }
             in 7..8 -> {
                 gradeTextView.text = "B"
-                gradeTextView.setTextColor(resources.getColor(R.color.light_green))
+                gradeTextView.setTextColor(ContextCompat.getColor(this, R.color.light_green))
                 true
             }
             in 4..6 -> {
                 gradeTextView.text = "C"
-                gradeTextView.setTextColor(resources.getColor(R.color.yellow))
+                gradeTextView.setTextColor(ContextCompat.getColor(this, R.color.yellow))
                 true
             }
             else -> {
                 gradeTextView.text = "W"
-                gradeTextView.setTextColor(resources.getColor(R.color.red))
+                gradeTextView.setTextColor(ContextCompat.getColor(this, R.color.red))
                 false
             }
         }
