@@ -2,35 +2,74 @@ package com.example.quizapp19
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-class CategoryActivity : AppCompatActivity(), CategoryAdapter.OnCategoryClickListener {
+class CategoryActivity : AppCompatActivity() {
 
-    private lateinit var categoryRecyclerView: RecyclerView
-    private lateinit var categoryAdapter: CategoryAdapter
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var categoryList: List<Category>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_category)
 
-        // Initialize the RecyclerView
-        categoryRecyclerView = findViewById(R.id.category_recycler_view)
-        categoryRecyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView = findViewById(R.id.categoryRecyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
 
-        // Fetch categories from the database
-        val dbHelper = QuizDatabaseHelper(this)
-        val categories = dbHelper.getCategories()
+        categoryList = listOf(
+            Category("General Knowledge"),
+            Category("Sports"),
+            Category("History"),
+            Category("Geography"),
+            Category("Science")
+        )
 
-        // Set up the adapter with the fetched categories
-        categoryAdapter = CategoryAdapter(categories, this)
-        categoryRecyclerView.adapter = categoryAdapter
+        val categoryAdapter = CategoryAdapter(categoryList)
+
+        recyclerView.adapter = categoryAdapter
     }
 
-    override fun onCategoryClick(category: Category) {
-        val intent = Intent(this, QuizActivity::class.java)
-        intent.putExtra("categoryId", category.id)
-        startActivity(intent)
+    inner class CategoryAdapter(
+        private val categories: List<Category>
+    ) : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
+
+        inner class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+            val categoryTextView: TextView = itemView.findViewById(R.id.categoryTextView)
+
+            init {
+                itemView.setOnClickListener {
+                    val position = absoluteAdapterPosition
+                    if (position != RecyclerView.NO_POSITION) {
+                        val category = categories[position]
+                        val intent = Intent(itemView.context, QuizActivity::class.java)
+                        intent.putExtra("CATEGORY_ID", category.id)
+                        intent.putExtra("questionSet", category.setNumber)
+                        itemView.context.startActivity(intent)
+                    }
+                }
+            }
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
+            val itemView = LayoutInflater.from(parent.context)
+                .inflate(R.layout.category_item, parent, false)
+            return CategoryViewHolder(itemView)
+        }
+
+        override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
+            val currentCategory = categories[position]
+            holder.categoryTextView.text = currentCategory.name
+        }
+
+        override fun getItemCount(): Int {
+            return categories.size
+        }
     }
+
 }

@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
         // Find the start button by its ID and set a click listener on it
         val startButton = findViewById<Button>(R.id.startButton)
         startButton.setOnClickListener {
-            val intent = Intent(this, QuizActivity::class.java)
+            val intent = Intent(this, CategoryActivity::class.java)
             startActivity(intent)
         }
     }

@@ -29,6 +29,7 @@ class QuizActivity : AppCompatActivity() {
     private lateinit var gestureDetector: GestureDetectorCompat
 
 
+    private var categoryId: Int = 0
     private var currentQuestionIndex = 0
     private lateinit var questions: List<Question>
     private var totalQuestions = 0
@@ -56,8 +57,9 @@ class QuizActivity : AppCompatActivity() {
         timerTextView = findViewById(R.id.timerTextView)
 
         val questionSet = intent.getIntExtra("questionSet", Random.nextInt(1, totalQuestionSets + 1))
+        categoryId = intent.getIntExtra("CATEGORY_ID", 0)
         val dbHelper = QuizDatabaseHelper(this)
-        questions = dbHelper.getQuestionsBySet(questionSet)
+        questions = dbHelper.getQuestionsBySet(questionSet, categoryId)
         displayQuestion()
         quizTimer = QuizTimer(2 * 60, { time ->
             timerTextView.text = time

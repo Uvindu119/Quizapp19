@@ -6,5 +6,6 @@ data class Question(
     val options: List<String>,
     val correctAnswer: String,
     val imagePath: String = "",
-    val setNumber: Int
+    val setNumber: Int,
+    val categoryId: Int
 )

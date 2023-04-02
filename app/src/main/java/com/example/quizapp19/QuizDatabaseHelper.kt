@@ -9,7 +9,7 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
 
     companion object {
         private const val DATABASE_NAME = "Quiz.db"
-        private const val DATABASE_VERSION = 19
+        private const val DATABASE_VERSION = 24
 
         private const val TABLE_NAME = "questions"
         private const val COLUMN_ID = "id"
@@ -22,34 +22,34 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         private const val COLUMN_CORRECT_ANSWER = "correct_answer"
         private const val COLUMN_SET_NUMBER = "set_number"
         private const val TABLE_CATEGORIES = "categories"
-        private const val COLUMN_CATEGORY_ID = "id"
+        private const val COLUMN_CATEGORY_ID = "number"
         private const val COLUMN_CATEGORY_NAME = "name"
 
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
         val createTableSQL = """
-            CREATE TABLE $TABLE_NAME (
-                $COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                $COLUMN_QUESTION_TEXT TEXT,
-                $COLUMN_OPTION_1 TEXT,
-                $COLUMN_OPTION_2 TEXT,
-                $COLUMN_OPTION_3 TEXT,
-                $COLUMN_OPTION_4 TEXT,
-                $COLUMN_CORRECT_ANSWER INTEGER,
-                $COLUMN_IMAGE_PATH TEXT,
-                $COLUMN_SET_NUMBER INTEGER,
-                $COLUMN_CATEGORY_ID INTEGER,
-                FOREIGN KEY($COLUMN_CATEGORY_ID) REFERENCES $TABLE_CATEGORIES($COLUMN_CATEGORY_ID)
-            )
-        """.trimIndent()
+        CREATE TABLE $TABLE_NAME (
+            $COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+            $COLUMN_QUESTION_TEXT TEXT,
+            $COLUMN_OPTION_1 TEXT,
+            $COLUMN_OPTION_2 TEXT,
+            $COLUMN_OPTION_3 TEXT,
+            $COLUMN_OPTION_4 TEXT,
+            $COLUMN_CORRECT_ANSWER INTEGER,
+            $COLUMN_IMAGE_PATH TEXT,
+            $COLUMN_SET_NUMBER INTEGER,
+            $COLUMN_CATEGORY_ID INTEGER,
+            FOREIGN KEY($COLUMN_CATEGORY_ID) REFERENCES $TABLE_CATEGORIES($COLUMN_CATEGORY_ID)
+        )
+    """.trimIndent()
 
         val createCategoriesTableSQL = """
-            CREATE TABLE $TABLE_CATEGORIES (
-                $COLUMN_CATEGORY_ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                $COLUMN_CATEGORY_NAME TEXT
-            )
-        """.trimIndent()
+        CREATE TABLE $TABLE_CATEGORIES (
+            $COLUMN_CATEGORY_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+            $COLUMN_CATEGORY_NAME TEXT
+        )
+    """.trimIndent()
 
         db?.execSQL(createTableSQL)
         db?.execSQL(createCategoriesTableSQL)
@@ -96,7 +96,7 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         return categories
     }
 
-    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) { if (oldVersion < 19 && newVersion >= 19) {
+    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) { if (oldVersion < 24 && newVersion >= 24) {
         // Option 1: Drop the table and recreate it
         db?.execSQL("DROP TABLE IF EXISTS $TABLE_NAME")
         onCreate(db)
@@ -111,16 +111,16 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
 
     private fun insertSampleQuestions(db: SQLiteDatabase?) {
         val sampleQuestions = listOf(
-            Question("What is the capital of France?", listOf("Paris", "London", "Rome", "Berlin"), "Paris","",1),
-            Question("Book is to Reading as Fork is to:", listOf("drawing", "writing", "stirring", "eating"), "eating","",2),
-            Question("What comes next in the sequence: 1, 3, 9, 27, ___.", listOf("71", "73", "81", "83"), "81","android.resource://com.example.quizapp19/drawable/image1",2),
-            Question("If 4 people can do a work in 40 minutes then 8 people can do the same work in ___ minutes.", listOf("20", "40", "60", "80"), "20","android.resource://com.example.quizapp19/drawable/image1",1),
-            Question("Mary is 16 years old. She is 4 times older than her brother. How old will Mary be when she is twice his age? ", listOf("26", "20", "24", "28"), "24","android.resource://com.example.quizapp19/drawable/image1",2),
-            Question("Which fraction is the biggest? ", listOf("3/5", "5/8", "1/2 ", "4/7 "), "5/8","",1),
-            Question("The store reduces the price of one product by 20 percent. How many percent do you need to raise to the percentage to get the original price? ", listOf("25", "27", "30", "35"), "25","android.resource://com.example.quizapp19/drawable/image1",1),
-            Question("There are 5 machines that make 5 parts in 5 minutes. How long does it take to make 100 parts on 100 machines? ", listOf("5", "10", "15", "30"), "5","android.resource://com.example.quizapp19/drawable/image1",2),
-            Question("What is the name given to a group of HORSES? ", listOf("husk", "harras", "mute", "rush"), "husk","",1),
-            Question("What is a CURRICLE? ", listOf("a vehicle", "a boat", "a curtain", "a vegetable"), "a vehicle","",2)
+            Question("What is the capital of France?", listOf("Paris", "London", "Rome", "Berlin"), "Paris","",1,1),
+            Question("Book is to Reading as Fork is to:", listOf("drawing", "writing", "stirring", "eating"), "eating","",2,2),
+            Question("What comes next in the sequence: 1, 3, 9, 27, ___.", listOf("71", "73", "81", "83"), "81","android.resource://com.example.quizapp19/drawable/image1",2,2),
+            Question("If 4 people can do a work in 40 minutes then 8 people can do the same work in ___ minutes.", listOf("20", "40", "60", "80"), "20","android.resource://com.example.quizapp19/drawable/image1",1,1),
+            Question("Mary is 16 years old. She is 4 times older than her brother. How old will Mary be when she is twice his age? ", listOf("26", "20", "24", "28"), "24","android.resource://com.example.quizapp19/drawable/image1",2,2),
+            Question("Which fraction is the biggest? ", listOf("3/5", "5/8", "1/2 ", "4/7 "), "5/8","",1,1),
+            Question("The store reduces the price of one product by 20 percent. How many percent do you need to raise to the percentage to get the original price? ", listOf("25", "27", "30", "35"), "25","android.resource://com.example.quizapp19/drawable/image1",1,1),
+            Question("There are 5 machines that make 5 parts in 5 minutes. How long does it take to make 100 parts on 100 machines? ", listOf("5", "10", "15", "30"), "5","android.resource://com.example.quizapp19/drawable/image1",2,2),
+            Question("What is the name given to a group of HORSES? ", listOf("husk", "harras", "mute", "rush"), "husk","",1,1),
+            Question("What is a CURRICLE? ", listOf("a vehicle", "a boat", "a curtain", "a vegetable"), "a vehicle","",2,2)
         )
 
         sampleQuestions.forEach { question ->
@@ -133,15 +133,16 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
                 put(COLUMN_CORRECT_ANSWER, question.correctAnswer)
                 put(COLUMN_IMAGE_PATH, question.imagePath)
                 put(COLUMN_SET_NUMBER, question.setNumber)
+                put(COLUMN_CATEGORY_ID, question.categoryId)
             }
             db?.insert(TABLE_NAME, null, contentValues)
         }
     }
 
-    fun getQuestionsBySet(setNumber: Int): List<Question> {
+    fun getQuestionsBySet(setNumber: Int, categoryId: Int): List<Question> {
         val questions = mutableListOf<Question>()
 
-        val cursor = readableDatabase.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COLUMN_SET_NUMBER = $setNumber", null)
+        val cursor = readableDatabase.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COLUMN_SET_NUMBER = $setNumber AND $COLUMN_CATEGORY_ID = $categoryId", null)
 
         if (cursor.moveToFirst()) {
             do {
@@ -164,7 +165,7 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
                     val correctAnswer = cursor.getString(correctAnswerIndex)
                     val imagePath = cursor.getString(imagePathIndex) // Get image path
 
-                    val question = Question(questionText, listOf(option1, option2, option3, option4), correctAnswer, imagePath , setNumber )
+                    val question = Question(questionText, listOf(option1, option2, option3, option4), correctAnswer, imagePath , setNumber,categoryId)
                     questions.add(question)
                 }
             } while (cursor.moveToNext())
