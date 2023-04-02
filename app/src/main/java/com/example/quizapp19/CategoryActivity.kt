@@ -45,7 +45,7 @@ class CategoryActivity : AppCompatActivity() {
                         val category = categories[position]
                         val intent = Intent(itemView.context, QuizActivity::class.java)
                         intent.putExtra("CATEGORY_ID", category.id)
-                        intent.putExtra("questionSet", category.setNumber)
+
                         itemView.context.startActivity(intent)
                     }
                 }
