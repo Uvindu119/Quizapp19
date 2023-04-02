@@ -53,6 +53,7 @@ class ResultsActivity : AppCompatActivity() {
                 gradeTextView.text = "W"
                 gradeTextView.setTextColor(ContextCompat.getColor(this, R.color.red))
                 false
+
             }
         }
 
