@@ -3,13 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:gravity="center"
     android:padding="16dp">
 
     <TextView
         android:id="@+id/categoryTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Category Name"
+        android:text=""
+        android:textColor="@color/background"
+        android:background="@color/primary"
         android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
 </LinearLayout>
