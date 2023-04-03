@@ -27,6 +27,7 @@ class QuizActivity : AppCompatActivity() {
     private lateinit var quizTimer: QuizTimer
     private lateinit var timerTextView: TextView
     private lateinit var gestureDetector: GestureDetectorCompat
+    private lateinit var progressBar: ProgressBar
 
 
     private var categoryId: Int = 0
@@ -55,6 +56,7 @@ class QuizActivity : AppCompatActivity() {
         option4 = findViewById(R.id.option4)
         submitButton = findViewById(R.id.submitButton)
         timerTextView = findViewById(R.id.timerTextView)
+        progressBar = findViewById(R.id.progressBar)
 
         val questionSet = intent.getIntExtra("questionSet", Random.nextInt(1, totalQuestionSets + 1))
         categoryId = intent.getIntExtra("CATEGORY_ID", 0)
@@ -136,7 +138,7 @@ class QuizActivity : AppCompatActivity() {
         if (questions.isNotEmpty()) {
             val question = questions[currentQuestionIndex]
             questionText.text = question.questionText
-
+            progressBar.progress = ((currentQuestionIndex + 1) * 100) / questions.size
             if (question.imagePath.isNotBlank()) {
                 Picasso.get().load(question.imagePath).into(questionImageView)
                 questionImageView.visibility = View.VISIBLE
@@ -150,6 +152,9 @@ class QuizActivity : AppCompatActivity() {
             option3.text = shuffledOptions[2]
             option4.text = shuffledOptions[3]
             optionsGroup.clearCheck()
+
+            progressBar.visibility = View.VISIBLE
+            submitButton.visibility = View.VISIBLE
 
             if (answeredQuestions.contains(currentQuestionIndex)) {
                 submitButton.visibility = View.GONE
