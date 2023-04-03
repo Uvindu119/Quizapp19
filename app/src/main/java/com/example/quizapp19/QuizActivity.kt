@@ -39,7 +39,7 @@ class QuizActivity : AppCompatActivity() {
     private var isQuizFinished = false
     private var scores = 0
     private val answeredQuestions = mutableSetOf<Int>()
-    private val totalQuestionSets = 2
+    private val totalQuestionSets = 3
     private val questionSet = Random.nextInt(1, totalQuestionSets + 1)
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -9,7 +9,7 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
 
     companion object {
         private const val DATABASE_NAME = "Quiz.db"
-        private const val DATABASE_VERSION = 27
+        private const val DATABASE_VERSION = 35
 
         private const val TABLE_NAME = "questions"
         private const val COLUMN_ID = "id"
@@ -58,31 +58,46 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
     }
 
     private fun insertSampleCategories(db: SQLiteDatabase?) {
-        val sampleCategories = listOf(
-            Category("General",1),
-            Category("Mathematics",2),
-            Category("Science",3),
-            Category("History",4)
-        )
-        sampleCategories.forEach { category ->
-            val contentValues = ContentValues().apply {
-                put(COLUMN_CATEGORY_NAME, category.name)
+        val cursor = db?.rawQuery("SELECT * FROM $TABLE_CATEGORIES", null)
+        cursor?.let {
+            if (it.count == 0) {
+                val sampleCategories = listOf(
+                    Category("General",1),
+                    Category("Mathematics",2),
+                    Category("Science",3),
+                    Category("History",4)
+                )
+                sampleCategories.forEach { category ->
+                    val contentValues = ContentValues().apply {
+                        put(COLUMN_CATEGORY_NAME, category.name)
+                    }
+                    db.insert(TABLE_CATEGORIES, null, contentValues)
+                }
             }
-            db?.insert(TABLE_CATEGORIES, null, contentValues)
+            it.close()
         }
     }
+    private fun addQuestion(db: SQLiteDatabase?, question: Question) {
+        val contentValues = ContentValues().apply {
+            put(COLUMN_QUESTION_TEXT, question.questionText)
+            put(COLUMN_OPTION_1, question.options[0])
+            put(COLUMN_OPTION_2, question.options[1])
+            put(COLUMN_OPTION_3, question.options[2])
+            put(COLUMN_OPTION_4, question.options[3])
+            put(COLUMN_CORRECT_ANSWER, question.correctAnswer)
+            put(COLUMN_IMAGE_PATH, question.imagePath)
+            put(COLUMN_SET_NUMBER, question.setNumber)
+            put(COLUMN_CATEGORY_ID, question.categoryId)
+        }
+        db?.insert(TABLE_NAME, null, contentValues)
+    }
 
-
-    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) { if (oldVersion < 27 && newVersion >= 27) {
+    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) { if (oldVersion < 35 && newVersion >= 35) {
         // Option 1: Drop the table and recreate it
         db?.execSQL("DROP TABLE IF EXISTS $TABLE_NAME")
         onCreate(db)
-
-        // Option 2: Insert new questions
-        // val newQuestion1 = Question(...)
-        // val newQuestion2 = Question(...)
-        // addQuestion(db, newQuestion1)
-        // addQuestion(db, newQuestion2)
+        val newQuestion = Question("What is the capital of Australia?", listOf("Sydney", "Canberra", "Melbourne", "Brisbane"), "Sydney", "", 3, 3)
+        addQuestion(db, newQuestion)
     }
     }
 
@@ -98,6 +113,7 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
             Question("There are 5 machines that make 5 parts in 5 minutes. How long does it take to make 100 parts on 100 machines? ", listOf("5", "10", "15", "30"), "5","android.resource://com.example.quizapp19/drawable/image1",2,2),
             Question("What is the name given to a group of HORSES? ", listOf("husk", "harras", "mute", "rush"), "husk","",1,1),
             Question("What is a CURRICLE? ", listOf("a vehicle", "a boat", "a curtain", "a vegetable"), "a vehicle","",2,2)
+
         )
 
         sampleQuestions.forEach { question ->
