@@ -26,6 +26,13 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         private const val COLUMN_CATEGORY_ID = "number"
         private const val COLUMN_CATEGORY_NAME = "name"
 
+        private const val TABLE_NAME_USERS = "users"
+        private const val COLUMN_USER_ID = "id"
+        private const val COLUMN_USER_NAME = "name"
+        private const val COLUMN_USER_EMAIL = "email"
+        private const val COLUMN_USER_PASSWORD = "password"
+
+
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
@@ -52,6 +59,17 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         )
     """.trimIndent()
 
+        val createTableUsersSQL = """
+            CREATE TABLE $TABLE_NAME_USERS (
+                $COLUMN_USER_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                $COLUMN_USER_NAME TEXT,
+                $COLUMN_USER_EMAIL TEXT UNIQUE,
+                $COLUMN_USER_PASSWORD TEXT
+            )
+        """.trimIndent()
+
+
+        db?.execSQL(createTableUsersSQL)
         db?.execSQL(createTableSQL)
         db?.execSQL(createCategoriesTableSQL)
         insertSampleQuestions(db)
@@ -149,6 +167,22 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         }
         cursor.close()
         return categories
+    }
+
+    fun addUser(username: String, password: String, email: String): Boolean {
+        val contentValues = ContentValues().apply {
+            put(COLUMN_USER_NAME, username)
+            put(COLUMN_USER_PASSWORD, password)
+            put(COLUMN_USER_EMAIL, email)
+        }
+        return writableDatabase.insert(TABLE_NAME_USERS, null, contentValues) > 0
+    }
+    fun checkUser(username: String, password: String): Boolean {
+        val query = "SELECT * FROM $TABLE_NAME_USERS WHERE $COLUMN_USER_NAME = ? AND $COLUMN_USER_PASSWORD = ?"
+        val cursor = readableDatabase.rawQuery(query, arrayOf(username, password))
+        val exists = cursor.count > 0
+        cursor.close()
+        return exists
     }
     fun getQuestionsBySet(setNumber: Int, categoryId: Int): List<Question> {
         val questions = mutableListOf<Question>()
