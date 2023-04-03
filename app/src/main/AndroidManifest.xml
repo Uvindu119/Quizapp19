@@ -22,7 +22,6 @@
         <activity android:name=".QuizActivity" />
         <activity android:name=".ResultsActivity" />
         <activity android:name=".CategoryActivity" />
-        <activity android:name=".AddQuestionActivity"/>
     </application>
 
 </manifest>
