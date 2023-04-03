@@ -9,7 +9,7 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
 
     companion object {
         private const val DATABASE_NAME = "Quiz.db"
-        private const val DATABASE_VERSION = 35
+        private const val DATABASE_VERSION = 36
 
         private const val TABLE_NAME = "questions"
         private const val COLUMN_ID = "id"
@@ -53,7 +53,7 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
 
         db?.execSQL(createTableSQL)
         db?.execSQL(createCategoriesTableSQL)
-        insertSampleQuestions(db) // Insert sample questions
+        insertSampleQuestions(db)
         insertSampleCategories(db)
     }
 
@@ -92,7 +92,7 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         db?.insert(TABLE_NAME, null, contentValues)
     }
 
-    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) { if (oldVersion < 35 && newVersion >= 35) {
+    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) { if (oldVersion < 36 && newVersion >= 36) {
         // Option 1: Drop the table and recreate it
         db?.execSQL("DROP TABLE IF EXISTS $TABLE_NAME")
         onCreate(db)
