@@ -78,7 +78,7 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
             it.close()
         }
     }
-    private fun addQuestion(db: SQLiteDatabase?, question: Question) {
+     fun addQuestion(db: SQLiteDatabase?, question: Question) {
         val contentValues = ContentValues().apply {
             put(COLUMN_QUESTION_TEXT, question.questionText)
             put(COLUMN_OPTION_1, question.options[0])
