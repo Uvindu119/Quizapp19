@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import java.util.*
 
 class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
@@ -152,36 +153,56 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
     fun getQuestionsBySet(setNumber: Int, categoryId: Int): List<Question> {
         val questions = mutableListOf<Question>()
 
-        val cursor = readableDatabase.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COLUMN_SET_NUMBER = $setNumber AND $COLUMN_CATEGORY_ID = $categoryId", null)
-
-        if (cursor.moveToFirst()) {
+        // Step 1: Get all set numbers for the given category
+        val setNumbers = mutableListOf<Int>()
+        val setCursor = readableDatabase.rawQuery("SELECT DISTINCT $COLUMN_SET_NUMBER FROM $TABLE_NAME WHERE $COLUMN_CATEGORY_ID = $categoryId", null)
+        if (setCursor.moveToFirst()) {
             do {
-                val questionTextIndex = cursor.getColumnIndex(COLUMN_QUESTION_TEXT)
-                val option1Index = cursor.getColumnIndex(COLUMN_OPTION_1)
-                val option2Index = cursor.getColumnIndex(COLUMN_OPTION_2)
-                val option3Index = cursor.getColumnIndex(COLUMN_OPTION_3)
-                val option4Index = cursor.getColumnIndex(COLUMN_OPTION_4)
-                val correctAnswerIndex = cursor.getColumnIndex(COLUMN_CORRECT_ANSWER)
-                val imagePathIndex = cursor.getColumnIndex(COLUMN_IMAGE_PATH)
-
-                if (questionTextIndex != -1 && option1Index != -1 && option2Index != -1 &&
-                    option3Index != -1 && option4Index != -1 && correctAnswerIndex != -1 && imagePathIndex != -1) {
-
-                    val questionText = cursor.getString(questionTextIndex)
-                    val option1 = cursor.getString(option1Index)
-                    val option2 = cursor.getString(option2Index)
-                    val option3 = cursor.getString(option3Index)
-                    val option4 = cursor.getString(option4Index)
-                    val correctAnswer = cursor.getString(correctAnswerIndex)
-                    val imagePath = cursor.getString(imagePathIndex) // Get image path
-
-                    val question = Question(questionText, listOf(option1, option2, option3, option4), correctAnswer, imagePath , setNumber,categoryId)
-                    questions.add(question)
+                val setNumberIndex = setCursor.getColumnIndex(COLUMN_SET_NUMBER)
+                if (setNumberIndex != -1) {
+                    setNumbers.add(setCursor.getInt(setNumberIndex))
                 }
-            } while (cursor.moveToNext())
+            } while (setCursor.moveToNext())
+        }
+        setCursor.close()
+
+        // Step 2: Shuffle the set numbers
+        setNumbers.shuffle(Random())
+
+        // Step 3: Retrieve the questions for each set in the shuffled list
+        for (shuffledSetNumber in setNumbers) {
+            val cursor = readableDatabase.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COLUMN_SET_NUMBER = $shuffledSetNumber AND $COLUMN_CATEGORY_ID = $categoryId", null)
+
+            if (cursor.moveToFirst()) {
+                do {
+                    val questionTextIndex = cursor.getColumnIndex(COLUMN_QUESTION_TEXT)
+                    val option1Index = cursor.getColumnIndex(COLUMN_OPTION_1)
+                    val option2Index = cursor.getColumnIndex(COLUMN_OPTION_2)
+                    val option3Index = cursor.getColumnIndex(COLUMN_OPTION_3)
+                    val option4Index = cursor.getColumnIndex(COLUMN_OPTION_4)
+                    val correctAnswerIndex = cursor.getColumnIndex(COLUMN_CORRECT_ANSWER)
+                    val imagePathIndex = cursor.getColumnIndex(COLUMN_IMAGE_PATH)
+
+                    if (questionTextIndex != -1 && option1Index != -1 && option2Index != -1 &&
+                        option3Index != -1 && option4Index != -1 && correctAnswerIndex != -1 && imagePathIndex != -1) {
+
+                        val questionText = cursor.getString(questionTextIndex)
+                        val option1 = cursor.getString(option1Index)
+                        val option2 = cursor.getString(option2Index)
+                        val option3 = cursor.getString(option3Index)
+                        val option4 = cursor.getString(option4Index)
+                        val correctAnswer = cursor.getString(correctAnswerIndex)
+                        val imagePath = cursor.getString(imagePathIndex) // Get image path
+
+                        val question = Question(questionText, listOf(option1, option2, option3, option4), correctAnswer, imagePath , setNumber,categoryId)
+                        questions.add(question)
+                    }
+                } while (cursor.moveToNext())
+            }
+
+            cursor.close()
         }
 
-        cursor.close()
         return questions
     }
 
