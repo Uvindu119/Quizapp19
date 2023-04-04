@@ -10,7 +10,7 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
 
     companion object {
         private const val DATABASE_NAME = "Quiz.db"
-        private const val DATABASE_VERSION = 38
+        private const val DATABASE_VERSION = 41
 
         private const val TABLE_NAME = "questions"
         private const val COLUMN_ID = "id"
@@ -33,11 +33,24 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         private const val COLUMN_USER_PASSWORD = "password"
 
 
+
+
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
+        val createTableUsersSQL = """
+            CREATE TABLE IF NOT EXISTS $TABLE_NAME_USERS (
+                $COLUMN_USER_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                $COLUMN_USER_NAME TEXT UNIQUE,
+                $COLUMN_USER_EMAIL TEXT UNIQUE,
+                $COLUMN_USER_PASSWORD TEXT
+            )
+        """.trimIndent()
+
+        db?.execSQL(createTableUsersSQL)
+
         val createTableSQL = """
-        CREATE TABLE $TABLE_NAME (
+        CREATE TABLE IF NOT EXISTS $TABLE_NAME (
             $COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT,
             $COLUMN_QUESTION_TEXT TEXT,
             $COLUMN_OPTION_1 TEXT,
@@ -52,6 +65,8 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         )
     """.trimIndent()
 
+        db?.execSQL(createTableSQL)
+
         val createCategoriesTableSQL = """
         CREATE TABLE IF NOT EXISTS $TABLE_CATEGORIES (
             $COLUMN_CATEGORY_ID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -59,18 +74,6 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         )
     """.trimIndent()
 
-        val createTableUsersSQL = """
-            CREATE TABLE $TABLE_NAME_USERS (
-                $COLUMN_USER_ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                $COLUMN_USER_NAME TEXT,
-                $COLUMN_USER_EMAIL TEXT UNIQUE,
-                $COLUMN_USER_PASSWORD TEXT
-            )
-        """.trimIndent()
-
-
-        db?.execSQL(createTableUsersSQL)
-        db?.execSQL(createTableSQL)
         db?.execSQL(createCategoriesTableSQL)
         insertSampleQuestions(db)
         insertSampleCategories(db)
@@ -111,7 +114,7 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         db?.insert(TABLE_NAME, null, contentValues)
     }
 
-    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) { if (oldVersion < 38 && newVersion >= 38) {
+    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) { if (oldVersion < 41 && newVersion >= 41) {
         // Option 1: Drop the table and recreate it
         db?.execSQL("DROP TABLE IF EXISTS $TABLE_NAME")
         onCreate(db)
