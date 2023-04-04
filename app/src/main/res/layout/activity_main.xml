@@ -47,4 +47,16 @@
         android:textColor="@color/background"
         android:textSize="18sp" />
 
+    <Button
+        android:id="@+id/loginButton"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/registerButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp"
+        android:background="@color/primaryVariant"
+        android:text="Login"
+        android:textColor="@color/background"
+        android:textSize="18sp" />
+
 </RelativeLayout>

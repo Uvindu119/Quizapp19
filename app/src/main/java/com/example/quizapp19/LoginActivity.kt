@@ -1,5 +1,6 @@
 package com.example.quizapp19
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -26,6 +27,8 @@ class LoginActivity : AppCompatActivity() {
             } else {
                 val user = dbHelper.getUser(username)
                 if (user != null && user.password == password) {
+                    val intent = Intent(this, CategoryActivity::class.java)
+                    startActivity(intent)
                     // Login successful
                     Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show()
                     // Start the next activity
