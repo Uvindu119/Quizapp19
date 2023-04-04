@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import android.util.Log
+
 
 class UserActivity : AppCompatActivity() {
 
@@ -23,6 +25,7 @@ class UserActivity : AppCompatActivity() {
 
         // Get user ID from the intent
         userId = intent.getIntExtra("USER_ID", 0)
+        Log.d("UserActivity", "User ID: $userId") // Log the user ID
 
         // Get the user from the database
         val user = dbHelper.getUserById(userId)
@@ -35,7 +38,7 @@ class UserActivity : AppCompatActivity() {
         logoutButton.setOnClickListener {
             // Go back to the MainActivity
             val intent = Intent(this, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             startActivity(intent)
             finish()
         }

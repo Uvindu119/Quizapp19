@@ -1,6 +1,5 @@
 package com.example.quizapp19
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -27,12 +26,8 @@ class LoginActivity : AppCompatActivity() {
             } else {
                 val user = dbHelper.getUser(username)
                 if (user != null && user.password == password) {
-                    val sharedPreferences = getSharedPreferences("QuizAppPrefs", Context.MODE_PRIVATE)
-                    val editor = sharedPreferences.edit()
-                    editor.putInt("userId", user.id)
-                    editor.apply()
-
                     val intent = Intent(this, UserActivity::class.java)
+                    intent.putExtra("USER_ID", user.id) // Pass the user's ID to UserActivity
                     startActivity(intent)
                     finish()
 
