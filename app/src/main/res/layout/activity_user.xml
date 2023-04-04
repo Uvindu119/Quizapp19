@@ -14,6 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="User Name"
+        android:textColor="@color/green"
         android:textSize="24sp"
         android:textStyle="bold" />
 
@@ -21,6 +22,7 @@
         android:id="@+id/emailTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/green"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="8dp"
         android:text="user@example.com"
