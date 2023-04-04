@@ -17,12 +17,13 @@ class RegisterActivity : AppCompatActivity() {
 
         registerButton.setOnClickListener {
             val username = usernameEditText.text.toString().trim()
+            val email = emailEditText.text.toString().trim()
             val password = passwordEditText.text.toString().trim()
 
-            if (username.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Please enter a username and password", Toast.LENGTH_SHORT).show()
+            if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "Please enter a username, email, and password", Toast.LENGTH_SHORT).show()
             } else {
-                if (dbHelper.addUser(username, password, "")) {
+                if (dbHelper.addUser(username, email, password)) {
                     Toast.makeText(this, "User registered successfully", Toast.LENGTH_SHORT).show()
                     finish()
                 } else {
@@ -30,6 +31,7 @@ class RegisterActivity : AppCompatActivity() {
                 }
             }
         }
+
     }
 
     override fun onDestroy() {

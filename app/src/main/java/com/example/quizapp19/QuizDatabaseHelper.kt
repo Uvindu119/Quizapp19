@@ -169,21 +169,50 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         return categories
     }
 
-    fun addUser(username: String, password: String, email: String): Boolean {
-        val contentValues = ContentValues().apply {
-            put(COLUMN_USER_NAME, username)
-            put(COLUMN_USER_PASSWORD, password)
-            put(COLUMN_USER_EMAIL, email)
+    fun addUser(username: String, email: String, password: String): Boolean {
+        val db = this.writableDatabase
+        val values = ContentValues()
+        values.put(COLUMN_USER_NAME, username)
+        values.put(COLUMN_USER_EMAIL, email) // Added email parameter
+        values.put(COLUMN_USER_PASSWORD, password)
+        val newRowId = db.insert(TABLE_NAME_USERS, null, values)
+        return newRowId != -1L
+    }
+    fun getUser(username: String): User? {
+        val db = this.readableDatabase
+        val selection = "$COLUMN_USER_NAME = ?"
+        val selectionArgs = arrayOf(username)
+        val cursor = db.query(
+            TABLE_NAME_USERS,
+            null,
+            selection,
+            selectionArgs,
+            null,
+            null,
+            null
+        )
+        return if (cursor.moveToFirst()) {
+            val columnIndexId = cursor.getColumnIndexOrThrow(COLUMN_ID)
+            val columnIndexName = cursor.getColumnIndexOrThrow(COLUMN_USER_NAME)
+            val columnIndexEmail = cursor.getColumnIndexOrThrow(COLUMN_USER_EMAIL)
+            val columnIndexPassword = cursor.getColumnIndexOrThrow(COLUMN_USER_PASSWORD)
+
+            val user = User(
+                cursor.getInt(columnIndexId),
+                cursor.getString(columnIndexName),
+                cursor.getString(columnIndexEmail),
+                cursor.getString(columnIndexPassword)
+            )
+            cursor.close()
+            user
+        } else {
+            cursor.close()
+            null
         }
-        return writableDatabase.insert(TABLE_NAME_USERS, null, contentValues) > 0
     }
-    fun checkUser(username: String, password: String): Boolean {
-        val query = "SELECT * FROM $TABLE_NAME_USERS WHERE $COLUMN_USER_NAME = ? AND $COLUMN_USER_PASSWORD = ?"
-        val cursor = readableDatabase.rawQuery(query, arrayOf(username, password))
-        val exists = cursor.count > 0
-        cursor.close()
-        return exists
-    }
+
+
+
     fun getQuestionsBySet(setNumber: Int, categoryId: Int): List<Question> {
         val questions = mutableListOf<Question>()
 
