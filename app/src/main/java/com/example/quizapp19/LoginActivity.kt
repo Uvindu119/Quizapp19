@@ -1,7 +1,8 @@
 package com.example.quizapp19
+
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
@@ -26,8 +27,15 @@ class LoginActivity : AppCompatActivity() {
             } else {
                 val user = dbHelper.getUser(username)
                 if (user != null && user.password == password) {
+                    val sharedPreferences = getSharedPreferences("QuizAppPrefs", Context.MODE_PRIVATE)
+                    val editor = sharedPreferences.edit()
+                    editor.putInt("userId", user.id)
+                    editor.apply()
+
                     val intent = Intent(this, CategoryActivity::class.java)
                     startActivity(intent)
+                    finish()
+
                     // Login successful
                     showSnackbar("Login successful")
                 } else {
