@@ -1,11 +1,11 @@
 package com.example.quizapp19
-
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
 
@@ -17,24 +17,22 @@ class LoginActivity : AppCompatActivity() {
 
         dbHelper = QuizDatabaseHelper(this)
 
-        val loginButton = findViewById<Button>(R.id.loginButton)
         loginButton.setOnClickListener {
-            val username = findViewById<EditText>(R.id.usernameEditText).text.toString().trim()
-            val password = findViewById<EditText>(R.id.passwordEditText).text.toString().trim()
+            val username = usernameEditText.text.toString().trim()
+            val password = passwordEditText.text.toString().trim()
 
             if (username.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Please enter a username and password", Toast.LENGTH_SHORT).show()
+                showSnackbar("Please enter a username and password")
             } else {
                 val user = dbHelper.getUser(username)
                 if (user != null && user.password == password) {
                     val intent = Intent(this, CategoryActivity::class.java)
                     startActivity(intent)
                     // Login successful
-                    Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show()
-                    // Start the next activity
+                    showSnackbar("Login successful")
                 } else {
                     // Login failed
-                    Toast.makeText(this, "Incorrect username or password", Toast.LENGTH_SHORT).show()
+                    showSnackbar(if (user == null) "User not found" else "Incorrect username or password")
                 }
             }
         }
@@ -43,5 +41,12 @@ class LoginActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         dbHelper.close()
+    }
+
+    private fun showSnackbar(message: String) {
+        val snackbar = Snackbar.make(loginButton, message, Snackbar.LENGTH_SHORT)
+        val snackbarView = snackbar.view
+        snackbarView.setBackgroundColor(ContextCompat.getColor(this, R.color.primaryVariant))
+        snackbar.show()
     }
 }

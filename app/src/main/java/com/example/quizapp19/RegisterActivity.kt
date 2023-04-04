@@ -1,8 +1,8 @@
 package com.example.quizapp19
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_register.*
 
 class RegisterActivity : AppCompatActivity() {
@@ -21,13 +21,13 @@ class RegisterActivity : AppCompatActivity() {
             val password = passwordEditText.text.toString().trim()
 
             if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Please enter a username, email, and password", Toast.LENGTH_SHORT).show()
+                Snackbar.make(it, "Please enter a username, email, and password", Snackbar.LENGTH_SHORT).show()
             } else {
                 if (dbHelper.addUser(username, email, password)) {
-                    Toast.makeText(this, "User registered successfully", Toast.LENGTH_SHORT).show()
+                    Snackbar.make(it, "User registered successfully", Snackbar.LENGTH_SHORT).show()
                     finish()
                 } else {
-                    Toast.makeText(this, "Error registering user", Toast.LENGTH_SHORT).show()
+                    Snackbar.make(it, "Error registering user", Snackbar.LENGTH_SHORT).show()
                 }
             }
         }
