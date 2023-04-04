@@ -10,7 +10,7 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
 
     companion object {
         private const val DATABASE_NAME = "Quiz.db"
-        private const val DATABASE_VERSION = 42
+        private const val DATABASE_VERSION = 43
 
         private const val TABLE_NAME = "questions"
         private const val COLUMN_ID = "id"
@@ -114,7 +114,7 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         db?.insert(TABLE_NAME, null, contentValues)
     }
 
-    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) { if (oldVersion < 42 && newVersion >= 42) {
+    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) { if (oldVersion < 43 && newVersion >= 43) {
         // Option 1: Drop the table and recreate it
         db?.execSQL("DROP TABLE IF EXISTS $TABLE_NAME")
         onCreate(db)
@@ -213,7 +213,25 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
             null
         }
     }
+    fun getUserById(userId: Int): User? {
+        val db = this.readableDatabase
+        val cursor = db.query(
+            TABLE_NAME_USERS, arrayOf(COLUMN_USER_ID, COLUMN_USER_NAME, COLUMN_USER_EMAIL, COLUMN_USER_PASSWORD),
+            "$COLUMN_USER_ID=?", arrayOf(userId.toString()), null, null, null
+        )
 
+        var user: User? = null
+        if (cursor.moveToFirst()) {
+            user = User(
+                id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_USER_ID)),
+                name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_NAME)),
+                email = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_EMAIL)),
+                password = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_PASSWORD))
+            )
+        }
+        cursor.close()
+        return user
+    }
 
 
     fun getQuestionsBySet(setNumber: Int, categoryId: Int): List<Question> {

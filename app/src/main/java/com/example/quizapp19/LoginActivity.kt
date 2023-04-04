@@ -32,7 +32,7 @@ class LoginActivity : AppCompatActivity() {
                     editor.putInt("userId", user.id)
                     editor.apply()
 
-                    val intent = Intent(this, CategoryActivity::class.java)
+                    val intent = Intent(this, UserActivity::class.java)
                     startActivity(intent)
                     finish()
 
