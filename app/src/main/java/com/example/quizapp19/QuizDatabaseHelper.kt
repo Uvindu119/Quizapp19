@@ -31,6 +31,17 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         private const val COLUMN_USER_NAME = "name"
         private const val COLUMN_USER_EMAIL = "email"
         private const val COLUMN_USER_PASSWORD = "password"
+        private const val COLUMN_QUESTIONS_ANSWERED = "questions_answered"
+        private const val COLUMN_QUESTIONSETS_ANSWERED = "questionsets_answered"
+        private const val COLUMN_CORRECT_ANSWERS = "correct_answers"
+        private const val COLUMN_INCORRECT_ANSWERS = "incorrect_answers"
+        private const val COLUMN_CORRECT_PERCENTAGE = "correct_percentage"
+        private const val COLUMN_INCORRECT_PERCENTAGE = "incorrect_percentage"
+        private const val COLUMN_GRADE_A = "grade_a"
+        private const val COLUMN_GRADE_B = "grade_b"
+        private const val COLUMN_GRADE_C = "grade_c"
+        private const val COLUMN_GRADE_W = "grade_w"
+        private const val COLUMN_SPECIALIZED_CATEGORIES = "specialized_categories"
 
 
 
@@ -39,13 +50,24 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
 
     override fun onCreate(db: SQLiteDatabase?) {
         val createTableUsersSQL = """
-            CREATE TABLE IF NOT EXISTS $TABLE_NAME_USERS (
-                $COLUMN_USER_ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                $COLUMN_USER_NAME TEXT UNIQUE,
-                $COLUMN_USER_EMAIL TEXT UNIQUE,
-                $COLUMN_USER_PASSWORD TEXT
-            )
-        """.trimIndent()
+    CREATE TABLE $TABLE_NAME_USERS (
+    $COLUMN_USER_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    $COLUMN_USER_NAME TEXT NOT NULL,
+    $COLUMN_USER_EMAIL TEXT NOT NULL,
+    $COLUMN_USER_PASSWORD TEXT NOT NULL,
+    $COLUMN_QUESTIONS_ANSWERED INTEGER DEFAULT 0,
+    $COLUMN_QUESTIONSETS_ANSWERED INTEGER DEFAULT 0,
+    $COLUMN_CORRECT_ANSWERS INTEGER DEFAULT 0,
+    $COLUMN_INCORRECT_ANSWERS INTEGER DEFAULT 0,
+    $COLUMN_CORRECT_PERCENTAGE FLOAT DEFAULT 0.0,
+    $COLUMN_INCORRECT_PERCENTAGE FLOAT DEFAULT 0.0,
+    $COLUMN_GRADE_A INTEGER DEFAULT 0,
+    $COLUMN_GRADE_B INTEGER DEFAULT 0,
+    $COLUMN_GRADE_C INTEGER DEFAULT 0,
+    $COLUMN_GRADE_W INTEGER DEFAULT 0,
+    $COLUMN_SPECIALIZED_CATEGORIES TEXT
+    )
+""".trimIndent()
 
         db?.execSQL(createTableUsersSQL)
 
@@ -195,16 +217,38 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
             null
         )
         return if (cursor.moveToFirst()) {
-            val columnIndexId = cursor.getColumnIndexOrThrow(COLUMN_ID)
+            val columnIndexId = cursor.getColumnIndexOrThrow(COLUMN_USER_ID)
             val columnIndexName = cursor.getColumnIndexOrThrow(COLUMN_USER_NAME)
             val columnIndexEmail = cursor.getColumnIndexOrThrow(COLUMN_USER_EMAIL)
             val columnIndexPassword = cursor.getColumnIndexOrThrow(COLUMN_USER_PASSWORD)
+            val columnIndexQuestionsAnswered = cursor.getColumnIndexOrThrow(COLUMN_QUESTIONS_ANSWERED)
+            val columnIndexQuestionSetsAnswered = cursor.getColumnIndexOrThrow(COLUMN_QUESTIONSETS_ANSWERED)
+            val columnIndexCorrectAnswers = cursor.getColumnIndexOrThrow(COLUMN_CORRECT_ANSWERS)
+            val columnIndexIncorrectAnswers = cursor.getColumnIndexOrThrow(COLUMN_INCORRECT_ANSWERS)
+            val columnIndexCorrectPercentage = cursor.getColumnIndexOrThrow(COLUMN_CORRECT_PERCENTAGE)
+            val columnIndexIncorrectPercentage = cursor.getColumnIndexOrThrow(COLUMN_INCORRECT_PERCENTAGE)
+            val columnIndexGradeA = cursor.getColumnIndexOrThrow(COLUMN_GRADE_A)
+            val columnIndexGradeB = cursor.getColumnIndexOrThrow(COLUMN_GRADE_B)
+            val columnIndexGradeC = cursor.getColumnIndexOrThrow(COLUMN_GRADE_C)
+            val columnIndexGradeW = cursor.getColumnIndexOrThrow(COLUMN_GRADE_W)
+            val columnIndexSpecializedCategories = cursor.getColumnIndexOrThrow(COLUMN_SPECIALIZED_CATEGORIES)
 
             val user = User(
                 cursor.getInt(columnIndexId),
                 cursor.getString(columnIndexName),
                 cursor.getString(columnIndexEmail),
-                cursor.getString(columnIndexPassword)
+                cursor.getString(columnIndexPassword),
+                cursor.getInt(columnIndexQuestionsAnswered),
+                cursor.getInt(columnIndexQuestionSetsAnswered),
+                cursor.getInt(columnIndexCorrectAnswers),
+                cursor.getInt(columnIndexIncorrectAnswers),
+                cursor.getFloat(columnIndexCorrectPercentage),
+                cursor.getFloat(columnIndexIncorrectPercentage),
+                cursor.getInt(columnIndexGradeA),
+                cursor.getInt(columnIndexGradeB),
+                cursor.getInt(columnIndexGradeC),
+                cursor.getInt(columnIndexGradeW),
+                cursor.getString(columnIndexSpecializedCategories)
             )
             cursor.close()
             user
@@ -213,10 +257,30 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
             null
         }
     }
+    fun updateUserStats(user: User) {
+        val db = this.writableDatabase
+        val values = ContentValues().apply {
+            put(COLUMN_QUESTIONS_ANSWERED, user.questionsAnswered)
+            put(COLUMN_QUESTIONSETS_ANSWERED, user.questionsetsAnswered)
+            put(COLUMN_CORRECT_ANSWERS, user.correctAnswers)
+            put(COLUMN_INCORRECT_ANSWERS, user.incorrectAnswers)
+            put(COLUMN_CORRECT_PERCENTAGE, user.correctPercentage)
+            put(COLUMN_INCORRECT_PERCENTAGE, user.incorrectPercentage)
+            put(COLUMN_GRADE_A, user.gradeA)
+            put(COLUMN_GRADE_B, user.gradeB)
+            put(COLUMN_GRADE_C, user.gradeC)
+            put(COLUMN_GRADE_W, user.gradeW)
+            put(COLUMN_SPECIALIZED_CATEGORIES, user.specializedCategories)
+        }
+
+        db.update(TABLE_NAME_USERS, values, "$COLUMN_USER_ID=?", arrayOf(user.id.toString()))
+        db.close()
+    }
+
     fun getUserById(userId: Int): User? {
         val db = this.readableDatabase
         val cursor = db.query(
-            TABLE_NAME_USERS, arrayOf(COLUMN_USER_ID, COLUMN_USER_NAME, COLUMN_USER_EMAIL, COLUMN_USER_PASSWORD),
+            TABLE_NAME_USERS, arrayOf(COLUMN_USER_ID, COLUMN_USER_NAME, COLUMN_USER_EMAIL, COLUMN_USER_PASSWORD, COLUMN_QUESTIONS_ANSWERED, COLUMN_QUESTIONSETS_ANSWERED, COLUMN_CORRECT_ANSWERS, COLUMN_INCORRECT_ANSWERS, COLUMN_CORRECT_PERCENTAGE, COLUMN_INCORRECT_PERCENTAGE, COLUMN_GRADE_A, COLUMN_GRADE_B, COLUMN_GRADE_C,COLUMN_GRADE_W, COLUMN_SPECIALIZED_CATEGORIES),
             "$COLUMN_USER_ID=?", arrayOf(userId.toString()), null, null, null
         )
 
@@ -226,12 +290,24 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
                 id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_USER_ID)),
                 name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_NAME)),
                 email = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_EMAIL)),
-                password = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_PASSWORD))
+                password = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_PASSWORD)),
+                questionsAnswered = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_QUESTIONS_ANSWERED)),
+                questionsetsAnswered = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_QUESTIONSETS_ANSWERED)),
+                correctAnswers = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CORRECT_ANSWERS)),
+                incorrectAnswers = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_INCORRECT_ANSWERS)),
+                correctPercentage = cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_CORRECT_PERCENTAGE)),
+                incorrectPercentage = cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_INCORRECT_PERCENTAGE)),
+                gradeA = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_GRADE_A)),
+                gradeB = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_GRADE_B)),
+                gradeC = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_GRADE_C)),
+                gradeW = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_GRADE_W)),
+                specializedCategories = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_SPECIALIZED_CATEGORIES))
             )
         }
         cursor.close()
         return user
     }
+
 
 
     fun getQuestionsBySet(setNumber: Int, categoryId: Int): List<Question> {

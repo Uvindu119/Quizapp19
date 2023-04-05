@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 
 
+
 class UserActivity : AppCompatActivity() {
 
     private lateinit var dbHelper: QuizDatabaseHelper
@@ -21,6 +22,11 @@ class UserActivity : AppCompatActivity() {
 
         val nameTextView = findViewById<TextView>(R.id.nameTextView)
         val emailTextView = findViewById<TextView>(R.id.emailTextView)
+        val correctAnswersTextView = findViewById<TextView>(R.id.correctAnswersTextView)
+        val incorrectAnswersTextView = findViewById<TextView>(R.id.incorrectAnswersTextView)
+        val correctPercentageTextView = findViewById<TextView>(R.id.correctPercentageTextView)
+        val incorrectPercentageTextView = findViewById<TextView>(R.id.incorrectPercentageTextView)
+        val questionSetsAnsweredTextView = findViewById<TextView>(R.id.questionSetsAnsweredTextView)
         val logoutButton = findViewById<Button>(R.id.logoutButton)
 
         // Get user ID from the intent
@@ -33,6 +39,11 @@ class UserActivity : AppCompatActivity() {
         // Set the user's name and email
         nameTextView.text = user?.name
         emailTextView.text = user?.email
+        correctAnswersTextView.text = user?.correctAnswers.toString()
+        incorrectAnswersTextView.text = user?.incorrectAnswers.toString()
+        correctPercentageTextView.text = user?.correctPercentage.toString()
+        incorrectPercentageTextView.text = user?.incorrectPercentage.toString()
+        questionSetsAnsweredTextView.text = user?.questionsetsAnswered.toString()
 
         // Set the click listener for the logout button
         logoutButton.setOnClickListener {
@@ -44,3 +55,4 @@ class UserActivity : AppCompatActivity() {
         }
     }
 }
+
