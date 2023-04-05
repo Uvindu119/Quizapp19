@@ -81,6 +81,7 @@ class ResultsActivity : AppCompatActivity() {
                 gradeW = if (grade == "W") user.gradeW + 1 else user.gradeW,
                 specializedCategories = "Categories, you want to add" // Modify this line to update specialized categories
             )
+
             dbHelper.updateUserStats(updatedUser)
         }
 
