@@ -78,7 +78,7 @@ class ResultsActivity : AppCompatActivity() {
                 gradeA = if (grade == "A") user.gradeA + 1 else user.gradeA,
                 gradeB = if (grade == "B") user.gradeB + 1 else user.gradeB,
                 gradeC = if (grade == "C") user.gradeC + 1 else user.gradeC,
-                gradeW = if (grade == "W") user.gradeC + 1 else user.gradeW,
+                gradeW = if (grade == "W") user.gradeW + 1 else user.gradeW,
                 specializedCategories = "Categories, you want to add" // Modify this line to update specialized categories
             )
 
@@ -98,7 +98,7 @@ class ResultsActivity : AppCompatActivity() {
             }
         }
         restartButton.setOnClickListener {
-            val intent = Intent(this, QuizActivity::class.java)
+            val intent = Intent(this, UserActivity::class.java)
             val questionSet = getIntent().getIntExtra("questionSet",1)
             intent.putExtra("questionSet", questionSet)
             startActivity(intent)
@@ -106,6 +106,9 @@ class ResultsActivity : AppCompatActivity() {
         }
 
         exitButton.setOnClickListener {
+            val intent = Intent(this, UserActivity::class.java)
+            intent.putExtra("USER_ID", userId)
+            startActivity(intent)
             finish()
         }
     }

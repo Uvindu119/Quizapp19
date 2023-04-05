@@ -10,7 +10,7 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
 
     companion object {
         private const val DATABASE_NAME = "Quiz.db"
-        private const val DATABASE_VERSION = 45
+        private const val DATABASE_VERSION = 47
 
         private const val TABLE_NAME = "questions"
         private const val COLUMN_ID = "id"
@@ -136,9 +136,10 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         db?.insert(TABLE_NAME, null, contentValues)
     }
 
-    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) { if (oldVersion < 45 && newVersion >= 45) {
+    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) { if (oldVersion < 47 && newVersion >= 47) {
         // Option 1: Drop the table and recreate it
         db?.execSQL("DROP TABLE IF EXISTS $TABLE_NAME")
+        db?.execSQL("DROP TABLE IF EXISTS $TABLE_NAME_USERS")
         onCreate(db)
         val newQuestion = Question("What is the capital of Australia?", listOf("Sydney", "Canberra", "Melbourne", "Brisbane"), "Sydney", "", 3, 3)
         addQuestion(db, newQuestion)
@@ -198,11 +199,24 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         val db = this.writableDatabase
         val values = ContentValues()
         values.put(COLUMN_USER_NAME, username)
-        values.put(COLUMN_USER_EMAIL, email) // Added email parameter
+        values.put(COLUMN_USER_EMAIL, email)
         values.put(COLUMN_USER_PASSWORD, password)
+        values.put(COLUMN_QUESTIONS_ANSWERED, 0) // Initialize questionsAnswered
+        values.put(COLUMN_QUESTIONSETS_ANSWERED, 0) // Initialize questionSetsAnswered
+        values.put(COLUMN_CORRECT_ANSWERS, 0) // Initialize correctAnswers
+        values.put(COLUMN_INCORRECT_ANSWERS, 0) // Initialize incorrectAnswers
+        values.put(COLUMN_CORRECT_PERCENTAGE, 0f) // Initialize correctPercentage
+        values.put(COLUMN_INCORRECT_PERCENTAGE, 0f) // Initialize incorrectPercentage
+        values.put(COLUMN_GRADE_A, 0) // Initialize gradeA
+        values.put(COLUMN_GRADE_B, 0) // Initialize gradeB
+        values.put(COLUMN_GRADE_C, 0) // Initialize gradeC
+        values.put(COLUMN_GRADE_W, 0) // Initialize gradeW
+        values.put(COLUMN_SPECIALIZED_CATEGORIES, "") // Initialize specializedCategories
+
         val newRowId = db.insert(TABLE_NAME_USERS, null, values)
         return newRowId != -1L
     }
+
     fun getUser(username: String): User? {
         val db = this.readableDatabase
         val selection = "$COLUMN_USER_NAME = ?"

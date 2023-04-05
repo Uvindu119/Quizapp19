@@ -6,13 +6,14 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
-
-
+import kotlinx.android.synthetic.main.activity_user.*
 
 class UserActivity : AppCompatActivity() {
 
     private lateinit var dbHelper: QuizDatabaseHelper
     private lateinit var startButton: Button
+    private lateinit var nameTextView: TextView
+    private lateinit var emailTextView: TextView
     private var userId: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,8 +23,8 @@ class UserActivity : AppCompatActivity() {
         dbHelper = QuizDatabaseHelper(this)
 
         startButton = findViewById(R.id.startButton)
-        val nameTextView = findViewById<TextView>(R.id.nameTextView)
-        val emailTextView = findViewById<TextView>(R.id.emailTextView)
+        nameTextView = findViewById(R.id.nameTextView)
+        emailTextView = findViewById(R.id.emailTextView)
         val correctAnswersTextView = findViewById<TextView>(R.id.correctAnswersTextView)
         val incorrectAnswersTextView = findViewById<TextView>(R.id.incorrectAnswersTextView)
         val correctPercentageTextView = findViewById<TextView>(R.id.correctPercentageTextView)
@@ -34,18 +35,6 @@ class UserActivity : AppCompatActivity() {
         // Get user ID from the intent
         userId = intent.getIntExtra("USER_ID", 0)
         Log.d("UserActivity", "User ID: $userId") // Log the user ID
-
-        // Get the user from the database
-        val user = dbHelper.getUserById(userId)
-
-        // Set the user's name and email
-        nameTextView.text = user?.name
-        emailTextView.text = user?.email
-        correctAnswersTextView.text = user?.correctAnswers.toString()
-        incorrectAnswersTextView.text = user?.incorrectAnswers.toString()
-        correctPercentageTextView.text = user?.correctPercentage.toString()
-        incorrectPercentageTextView.text = user?.incorrectPercentage.toString()
-        questionSetsAnsweredTextView.text = user?.questionsetsAnswered.toString()
 
         // Set the click listener for the logout button
         logoutButton.setOnClickListener {
@@ -62,5 +51,20 @@ class UserActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
-}
 
+    override fun onResume() {
+        super.onResume()
+
+        // Get the user from the database
+        val user = dbHelper.getUserById(userId)
+
+        // Set the user's name and email
+        nameTextView.text = user?.name
+        emailTextView.text = user?.email
+        correctAnswersTextView.text = user?.correctAnswers.toString()
+        incorrectAnswersTextView.text = user?.incorrectAnswers.toString()
+        correctPercentageTextView.text = user?.correctPercentage.toString()
+        incorrectPercentageTextView.text = user?.incorrectPercentage.toString()
+        questionSetsAnsweredTextView.text = user?.questionsetsAnswered.toString()
+    }
+}
