@@ -12,6 +12,7 @@ import android.util.Log
 class UserActivity : AppCompatActivity() {
 
     private lateinit var dbHelper: QuizDatabaseHelper
+    private lateinit var startButton: Button
     private var userId: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,6 +21,7 @@ class UserActivity : AppCompatActivity() {
 
         dbHelper = QuizDatabaseHelper(this)
 
+        startButton = findViewById(R.id.startButton)
         val nameTextView = findViewById<TextView>(R.id.nameTextView)
         val emailTextView = findViewById<TextView>(R.id.emailTextView)
         val correctAnswersTextView = findViewById<TextView>(R.id.correctAnswersTextView)
@@ -52,6 +54,12 @@ class UserActivity : AppCompatActivity() {
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             startActivity(intent)
             finish()
+        }
+
+        startButton.setOnClickListener {
+            // Start CategoryActivity
+            val intent = Intent(this, CategoryActivity::class.java)
+            startActivity(intent)
         }
     }
 }
