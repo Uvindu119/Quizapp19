@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import android.util.Log
 
 class ResultsActivity : AppCompatActivity() {
     private lateinit var dbHelper: QuizDatabaseHelper
@@ -65,6 +66,7 @@ class ResultsActivity : AppCompatActivity() {
 
         // Get user information
         val user = dbHelper.getUserById(userId)
+        Log.d("ResultsActivity", "User before update: $user")
 
         // Update user statistics
         if (user != null) {
@@ -83,6 +85,8 @@ class ResultsActivity : AppCompatActivity() {
             )
 
             dbHelper.updateUserStats(updatedUser)
+            val updatedUserFromDB = dbHelper.getUserById(userId)
+            Log.d("ResultsActivity", "User after update: $updatedUserFromDB")
         }
 
         incorrectAnswersTextView.text = getString(R.string.incorrect_answers_text, incorrectAnswers.joinToString("\n\n"))
@@ -107,7 +111,7 @@ class ResultsActivity : AppCompatActivity() {
 
         exitButton.setOnClickListener {
             val intent = Intent(this, UserActivity::class.java)
-            intent.putExtra("USER_ID", userId)
+            intent.putExtra("userId", userId)
             startActivity(intent)
             finish()
         }

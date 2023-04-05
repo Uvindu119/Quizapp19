@@ -33,7 +33,7 @@ class UserActivity : AppCompatActivity() {
         val logoutButton = findViewById<Button>(R.id.logoutButton)
 
         // Get user ID from the intent
-        userId = intent.getIntExtra("USER_ID", 0)
+        userId = intent.getIntExtra("userId", 0)
         Log.d("UserActivity", "User ID: $userId") // Log the user ID
 
         // Set the click listener for the logout button
@@ -46,8 +46,8 @@ class UserActivity : AppCompatActivity() {
         }
 
         startButton.setOnClickListener {
-            // Start CategoryActivity
             val intent = Intent(this, CategoryActivity::class.java)
+            intent.putExtra("userId", userId)
             startActivity(intent)
         }
     }

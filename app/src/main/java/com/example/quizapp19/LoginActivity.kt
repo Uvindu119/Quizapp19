@@ -27,7 +27,7 @@ class LoginActivity : AppCompatActivity() {
                 val user = dbHelper.getUser(username)
                 if (user != null && user.password == password) {
                     val intent = Intent(this, UserActivity::class.java)
-                    intent.putExtra("USER_ID", user.id) // Pass the user's ID to UserActivity
+                    intent.putExtra("userId", user.id) // Pass the user's ID to UserActivity
                     startActivity(intent)
                     finish()
 

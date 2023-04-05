@@ -15,6 +15,7 @@ class CategoryActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var categoryList: List<Category>
     private lateinit var dbHelper: QuizDatabaseHelper
+    private var userId: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,7 +24,7 @@ class CategoryActivity : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.categoryRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
-
+        userId = intent.getIntExtra("userId", 0)
         categoryList = dbHelper.getCategories()
 
         val categoryAdapter = CategoryAdapter(categoryList)
@@ -45,6 +46,7 @@ class CategoryActivity : AppCompatActivity() {
                         val category = categories[position]
                         val intent = Intent(itemView.context, QuizActivity::class.java)
                         intent.putExtra("CATEGORY_ID", category.id)
+                        intent.putExtra("userId", userId)
 
                         itemView.context.startActivity(intent)
                     }
