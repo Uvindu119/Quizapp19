@@ -38,7 +38,7 @@ class ResultsActivity : AppCompatActivity() {
         val incorrectAnswers = intent.getStringArrayListExtra("incorrectAnswers") ?: arrayListOf()
 
         val score = correctAnswers * 2
-        scoreTextView.text = getString(R.string.score_text, score, totalQuestions)
+        scoreTextView.text = getString(R.string.score_text, score, totalQuestions*2)
 
         val grade = when (score) {
             in 9..totalQuestions  -> {

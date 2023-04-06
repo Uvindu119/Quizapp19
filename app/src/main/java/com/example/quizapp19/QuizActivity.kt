@@ -245,7 +245,7 @@ class QuizActivity : AppCompatActivity() {
 
         val intent = Intent(this, ResultsActivity::class.java)
         intent.putExtra("correctAnswers", correctAnswers)
-        intent.putExtra("totalQuestions", questions.size*2 )
+        intent.putExtra("totalQuestions", questions.size)
         intent.putStringArrayListExtra("incorrectAnswers", incorrectAnswers)
         intent.putExtra("questionSet", questionSet)
         intent.putExtra("userId", userId)
