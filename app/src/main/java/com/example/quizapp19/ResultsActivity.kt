@@ -37,10 +37,10 @@ class ResultsActivity : AppCompatActivity() {
         val incorrectAnswers = intent.getStringArrayListExtra("incorrectAnswers") ?: arrayListOf()
 
         val score = correctAnswers * 2
-        scoreTextView.text = getString(R.string.score_text, score, totalQuestions * 2)
+        scoreTextView.text = getString(R.string.score_text, score, totalQuestions)
 
         val grade = when (score) {
-            in 9..totalQuestions * 2 -> {
+            in 9..totalQuestions  -> {
                 gradeTextView.text = "A"
                 gradeTextView.setTextColor(ContextCompat.getColor(this, R.color.green))
                 "A"
