@@ -61,5 +61,8 @@ class UserActivity : AppCompatActivity() {
         incorrectPercentageTextView.text = user?.incorrectPercentage.toString()
         questionSetsAnsweredTextView.text = user?.questionsetsAnswered.toString()
         questionsAnsweredTextView.text = user?.questionsAnswered.toString()
+        gradeATextView.text = user?.gradeA.toString()
+        gradeBTextView.text = user?.gradeB.toString()
+        gradeCTextView.text = user?.gradeC.toString()
     }
 }

@@ -145,8 +145,6 @@
             app:layout_constraintStart_toStartOf="parent" />
 
 
-
-
         <TextView
             android:id="@+id/gradeATextView"
             android:layout_width="wrap_content"
