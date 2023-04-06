@@ -21,7 +21,7 @@ class UserActivity : AppCompatActivity() {
         setContentView(R.layout.activity_user)
 
         dbHelper = QuizDatabaseHelper(this)
-
+        emailTextView = findViewById(R.id.emailTextView)
         startButton = findViewById(R.id.startButton)
         nameTextView = findViewById(R.id.nameTextView)
         val logoutButton = findViewById<Button>(R.id.logoutButton)
