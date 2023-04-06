@@ -24,12 +24,6 @@ class UserActivity : AppCompatActivity() {
 
         startButton = findViewById(R.id.startButton)
         nameTextView = findViewById(R.id.nameTextView)
-        emailTextView = findViewById(R.id.emailTextView)
-        val correctAnswersTextView = findViewById<TextView>(R.id.correctAnswersTextView)
-        val incorrectAnswersTextView = findViewById<TextView>(R.id.incorrectAnswersTextView)
-        val correctPercentageTextView = findViewById<TextView>(R.id.correctPercentageTextView)
-        val incorrectPercentageTextView = findViewById<TextView>(R.id.incorrectPercentageTextView)
-        val questionSetsAnsweredTextView = findViewById<TextView>(R.id.questionSetsAnsweredTextView)
         val logoutButton = findViewById<Button>(R.id.logoutButton)
 
         // Get user ID from the intent
@@ -66,5 +60,6 @@ class UserActivity : AppCompatActivity() {
         correctPercentageTextView.text = user?.correctPercentage.toString()
         incorrectPercentageTextView.text = user?.incorrectPercentage.toString()
         questionSetsAnsweredTextView.text = user?.questionsetsAnswered.toString()
+        questionsAnsweredTextView.text = user?.questionsAnswered.toString()
     }
 }

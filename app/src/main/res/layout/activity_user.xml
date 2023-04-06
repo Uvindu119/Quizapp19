@@ -148,18 +148,24 @@
 
 
         <TextView
-            android:id="@+id/gradesLabel"
+            android:id="@+id/gradeATextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Grades Received (A/B/C):"
             app:layout_constraintTop_toBottomOf="@+id/correctPercentageTextView"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/gradesTextView"
+            android:id="@+id/gradeBTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/gradesLabel"
+            app:layout_constraintTop_toBottomOf="@+id/gradeATextView"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/gradeCTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/gradeBTextView"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
@@ -167,8 +173,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Specialized Categories:"
-            app:layout_constraintTop_toBottomOf="@+id/gradesTextView"
+            app:layout_constraintTop_toBottomOf="@+id/gradeCTextView"
             app:layout_constraintStart_toStartOf="parent" />
+
+
 
         <TextView
             android:id="@+id/specializedCategoriesTextView"

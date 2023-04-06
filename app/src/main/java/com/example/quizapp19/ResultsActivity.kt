@@ -18,6 +18,7 @@ class ResultsActivity : AppCompatActivity() {
     private lateinit var nextPaperButton: Button
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_results)
@@ -81,7 +82,6 @@ class ResultsActivity : AppCompatActivity() {
                 gradeB = if (grade == "B") user.gradeB + 1 else user.gradeB,
                 gradeC = if (grade == "C") user.gradeC + 1 else user.gradeC,
                 gradeW = if (grade == "W") user.gradeW + 1 else user.gradeW,
-                specializedCategories = "Categories, you want to add" // Modify this line to update specialized categories
             )
 
             dbHelper.updateUserStats(updatedUser)
