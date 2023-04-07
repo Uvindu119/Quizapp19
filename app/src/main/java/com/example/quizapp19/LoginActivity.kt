@@ -3,7 +3,6 @@ package com.example.quizapp19
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_login.*
 
@@ -22,7 +21,7 @@ class LoginActivity : AppCompatActivity() {
             val password = passwordEditText.text.toString().trim()
 
             if (username.isEmpty() || password.isEmpty()) {
-                showSnackbar("Please enter a username and password")
+                showSnackbar("Please enter username and password")
             } else {
                 val user = dbHelper.getUser(username)
                 if (user != null && user.password == password) {
@@ -47,9 +46,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun showSnackbar(message: String) {
-        val snackbar = Snackbar.make(loginButton, message, Snackbar.LENGTH_SHORT)
-        val snackbarView = snackbar.view
-        snackbarView.setBackgroundColor(ContextCompat.getColor(this, R.color.primaryVariant))
-        snackbar.show()
+        Snackbar.make(loginButton, message, Snackbar.LENGTH_SHORT).show()
     }
 }

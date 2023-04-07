@@ -21,17 +21,28 @@ class RegisterActivity : AppCompatActivity() {
             val password = passwordEditText.text.toString().trim()
 
             if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
-                Snackbar.make(it, "Please enter a username, email, and password", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(it, "Please enter user Details", Snackbar.LENGTH_SHORT).show()
+            } else if (!email.isValidEmail()) {
+                Snackbar.make(it, "Invalid email", Snackbar.LENGTH_SHORT).show()
             } else {
-                if (dbHelper.addUser(username, email, password)) {
-                    Snackbar.make(it, "User registered successfully", Snackbar.LENGTH_SHORT).show()
-                    finish()
+                val existingUser = dbHelper.getUser(username)
+
+                if (existingUser != null) {
+                    // Username already exists
+                    Snackbar.make(it, "Username already registered", Snackbar.LENGTH_SHORT).show()
                 } else {
-                    Snackbar.make(it, "Error registering user", Snackbar.LENGTH_SHORT).show()
+                    if (dbHelper.addUser(username, email, password)) {
+                        finish()
+                    } else {
+                        Snackbar.make(it, "Error registering user", Snackbar.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
+    }
 
+       private fun String.isValidEmail(): Boolean {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(this).matches()
     }
 
     override fun onDestroy() {
