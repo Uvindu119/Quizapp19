@@ -107,7 +107,7 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         cursor?.let {
             if (it.count == 0) {
                 val sampleCategories = listOf(
-                    Category("General",1),
+                    Category("General",1,),
                     Category("Mathematics",2),
                     Category("Science",3),
                     Category("History",4)

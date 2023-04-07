@@ -6,8 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.GridLayoutManager
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class CategoryActivity : AppCompatActivity() {
@@ -23,9 +24,12 @@ class CategoryActivity : AppCompatActivity() {
         dbHelper = QuizDatabaseHelper(this)
 
         recyclerView = findViewById(R.id.categoryRecyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = GridLayoutManager(this, 2)
         userId = intent.getIntExtra("userId", 0)
-        categoryList = dbHelper.getCategories()
+        categoryList = dbHelper.getCategories().map { category ->
+            val imageResourceId = getCategoryImageResourceId(category.id)
+            category.copy(imageResourceId = imageResourceId)
+        }
 
         val categoryAdapter = CategoryAdapter(categoryList)
 
@@ -38,6 +42,7 @@ class CategoryActivity : AppCompatActivity() {
 
         inner class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val categoryTextView: TextView = itemView.findViewById(R.id.categoryTextView)
+            val categoryImageView: ImageView = itemView.findViewById(R.id.categoryImageView)
 
             init {
                 itemView.setOnClickListener {
@@ -63,10 +68,20 @@ class CategoryActivity : AppCompatActivity() {
         override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
             val currentCategory = categories[position]
             holder.categoryTextView.text = currentCategory.name
+            holder.categoryImageView.setImageResource(currentCategory.imageResourceId)
         }
 
         override fun getItemCount(): Int {
             return categories.size
+        }
+    }
+
+    private fun getCategoryImageResourceId(categoryId: Int): Int {
+        return when (categoryId) {
+            1 -> R.drawable.category1
+            2 -> R.drawable.category2
+            // Add more categories here with their corresponding image resource IDs
+            else -> R.drawable.default_category_image // Set a default image for categories without a specific image
         }
     }
 
