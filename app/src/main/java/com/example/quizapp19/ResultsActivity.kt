@@ -30,10 +30,12 @@ class ResultsActivity : AppCompatActivity() {
         exitButton = findViewById(R.id.exitButton)
         nextPaperButton = findViewById(R.id.nextPaperButton)
 
+
         val userId = intent.getIntExtra("userId", 0)
         val correctAnswers = intent.getIntExtra("correctAnswers", 0)
         val totalQuestions = intent.getIntExtra("totalQuestions", 0)
         val incorrectAnswers = intent.getStringArrayListExtra("incorrectAnswers") ?: arrayListOf()
+
 
 
         val score = correctAnswers * 2
@@ -100,6 +102,8 @@ class ResultsActivity : AppCompatActivity() {
                 finish()
             }
         }
+
+
 
         exitButton.setOnClickListener {
             val intent = Intent(this, UserActivity::class.java)
