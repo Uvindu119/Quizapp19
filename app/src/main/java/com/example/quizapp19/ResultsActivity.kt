@@ -13,7 +13,6 @@ class ResultsActivity : AppCompatActivity() {
     private lateinit var scoreTextView: TextView
     private lateinit var gradeTextView: TextView
     private lateinit var incorrectAnswersTextView: TextView
-    private lateinit var restartButton: Button
     private lateinit var exitButton: Button
     private lateinit var nextPaperButton: Button
 
@@ -28,7 +27,6 @@ class ResultsActivity : AppCompatActivity() {
         scoreTextView = findViewById(R.id.scoreTextView)
         gradeTextView = findViewById(R.id.gradeTextView)
         incorrectAnswersTextView = findViewById(R.id.incorrectAnswersTextView)
-        restartButton = findViewById(R.id.restartButton)
         exitButton = findViewById(R.id.exitButton)
         nextPaperButton = findViewById(R.id.nextPaperButton)
 
@@ -36,7 +34,6 @@ class ResultsActivity : AppCompatActivity() {
         val correctAnswers = intent.getIntExtra("correctAnswers", 0)
         val totalQuestions = intent.getIntExtra("totalQuestions", 0)
         val incorrectAnswers = intent.getStringArrayListExtra("incorrectAnswers") ?: arrayListOf()
-        val questionSetId = intent.getIntExtra("questionSetId", 0)
 
 
         val score = correctAnswers * 2
@@ -102,13 +99,6 @@ class ResultsActivity : AppCompatActivity() {
                 startActivity(intent)
                 finish()
             }
-        }
-        restartButton.setOnClickListener {
-            val intent = Intent(this, QuizActivity::class.java)
-            intent.putExtra("questionSetId", questionSetId)
-            intent.putExtra("userId", userId)
-            startActivity(intent)
-            finish()
         }
 
         exitButton.setOnClickListener {
