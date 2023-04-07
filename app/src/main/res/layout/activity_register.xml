@@ -19,9 +19,9 @@
         android:id="@+id/usernameEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="text"
         android:textColorHint="@color/onSecondaryVariant"
         android:textColor="@color/background"
-        android:inputType="text"
         android:layout_marginTop="16dp"
         android:hint="Username" />
 

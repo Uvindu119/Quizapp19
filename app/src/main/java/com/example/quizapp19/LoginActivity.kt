@@ -21,7 +21,7 @@ class LoginActivity : AppCompatActivity() {
             val password = passwordEditText.text.toString().trim()
 
             if (username.isEmpty() || password.isEmpty()) {
-                showSnackbar("Please enter username and password")
+                showSnackbar("Please enter a username and password")
             } else {
                 val user = dbHelper.getUser(username)
                 if (user != null && user.password == password) {

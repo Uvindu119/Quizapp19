@@ -39,12 +39,12 @@ class RegisterActivity : AppCompatActivity() {
                 }
             }
         }
-    }
 
-       private fun String.isValidEmail(): Boolean {
+
+    }
+    fun String.isValidEmail(): Boolean {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(this).matches()
     }
-
     override fun onDestroy() {
         super.onDestroy()
         dbHelper.close()
