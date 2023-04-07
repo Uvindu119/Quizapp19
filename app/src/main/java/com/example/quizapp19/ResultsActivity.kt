@@ -36,6 +36,8 @@ class ResultsActivity : AppCompatActivity() {
         val correctAnswers = intent.getIntExtra("correctAnswers", 0)
         val totalQuestions = intent.getIntExtra("totalQuestions", 0)
         val incorrectAnswers = intent.getStringArrayListExtra("incorrectAnswers") ?: arrayListOf()
+        val questionSetId = intent.getIntExtra("questionSetId", 0)
+
 
         val score = correctAnswers * 2
         scoreTextView.text = getString(R.string.score_text, score, totalQuestions*2)
@@ -102,9 +104,9 @@ class ResultsActivity : AppCompatActivity() {
             }
         }
         restartButton.setOnClickListener {
-            val intent = Intent(this, UserActivity::class.java)
-            val questionSet = getIntent().getIntExtra("questionSet",1)
-            intent.putExtra("questionSet", questionSet)
+            val intent = Intent(this, QuizActivity::class.java)
+            intent.putExtra("questionSetId", questionSetId)
+            intent.putExtra("userId", userId)
             startActivity(intent)
             finish()
         }
