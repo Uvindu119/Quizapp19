@@ -14,14 +14,20 @@
         android:layout_height="wrap_content"
         tools:context=".UserActivity">
 
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/centerGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
         <TextView
             android:id="@+id/nameLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Name:"
+            android:text=""
             android:textColor="#FFFFFF"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -31,19 +37,17 @@
             android:layout_height="wrap_content"
             android:text="User Name"
             android:textColor="#FFFFFF"
+            android:layout_marginEnd="20dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nameLabel" />
+            app:layout_constraintTop_toTopOf="@+id/nameLabel"
+            app:layout_constraintBottom_toBottomOf="@+id/nameLabel" />
 
         <TextView
             android:id="@+id/emailLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Email:"
+            android:text=""
             android:textColor="#FFFFFF"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/nameTextView" />
 
@@ -53,16 +57,19 @@
             android:layout_height="wrap_content"
             android:text="User Email"
             android:textColor="#FFFFFF"
+            android:layout_marginEnd="20dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/emailLabel" />
+            app:layout_constraintTop_toTopOf="@+id/emailLabel"
+            app:layout_constraintBottom_toBottomOf="@+id/emailLabel" />
+
 
 
         <TextView
             android:id="@+id/questionsAnsweredLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textSize="18sp"
             android:text="Questions:"
             android:textColor="#FFFFFF"
             app:layout_constraintTop_toBottomOf="@+id/emailTextView"
@@ -72,8 +79,9 @@
             android:id="@+id/questionsAnsweredTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="18sp"
             android:textColor="#FFFFFF"
-            app:layout_constraintStart_toEndOf="@+id/questionsAnsweredLabel"
+            app:layout_constraintStart_toEndOf="@+id/centerGuideline"
             app:layout_constraintTop_toTopOf="@+id/questionsAnsweredLabel"
             app:layout_constraintBottom_toBottomOf="@+id/questionsAnsweredLabel" />
 
@@ -81,6 +89,7 @@
             android:id="@+id/questionsetsAnsweredLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="18sp"
             android:text="Question Sets:"
             android:textColor="#FFFFFF"
             app:layout_constraintTop_toBottomOf="@+id/questionsAnsweredTextView"
@@ -90,8 +99,9 @@
             android:id="@+id/questionSetsAnsweredTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="18sp"
             android:textColor="#FFFFFF"
-            app:layout_constraintStart_toEndOf="@+id/questionsetsAnsweredLabel"
+            app:layout_constraintStart_toEndOf="@+id/centerGuideline"
             app:layout_constraintTop_toTopOf="@+id/questionsetsAnsweredLabel"
             app:layout_constraintBottom_toBottomOf="@+id/questionsetsAnsweredLabel" />
 
@@ -99,6 +109,7 @@
             android:id="@+id/correctAnswersLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="18sp"
             android:text="Correct:"
             android:textColor="#FFFFFF"
             app:layout_constraintTop_toBottomOf="@+id/questionSetsAnsweredTextView"
@@ -108,8 +119,9 @@
             android:id="@+id/correctAnswersTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="18sp"
             android:textColor="#FFFFFF"
-            app:layout_constraintStart_toEndOf="@+id/correctAnswersLabel"
+            app:layout_constraintStart_toEndOf="@+id/centerGuideline"
             app:layout_constraintTop_toTopOf="@+id/correctAnswersLabel"
             app:layout_constraintBottom_toBottomOf="@+id/correctAnswersLabel" />
 
@@ -117,6 +129,7 @@
             android:id="@+id/incorrectAnswersLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="18sp"
             android:text="Incorrect:"
             android:textColor="#FFFFFF"
             app:layout_constraintTop_toBottomOf="@+id/correctAnswersTextView"
@@ -126,8 +139,9 @@
             android:id="@+id/incorrectAnswersTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="18sp"
             android:textColor="#FFFFFF"
-            app:layout_constraintStart_toEndOf="@+id/incorrectAnswersLabel"
+            app:layout_constraintStart_toEndOf="@+id/centerGuideline"
             app:layout_constraintTop_toTopOf="@+id/incorrectAnswersLabel"
             app:layout_constraintBottom_toBottomOf="@+id/incorrectAnswersLabel" />
 
@@ -136,6 +150,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Incorrect Percentage:"
+            android:textSize="18sp"
             android:textColor="#FFFFFF"
             app:layout_constraintTop_toBottomOf="@+id/incorrectAnswersTextView"
             app:layout_constraintStart_toStartOf="parent" />
@@ -144,8 +159,9 @@
             android:id="@+id/incorrectPercentageTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="18sp"
             android:textColor="#FFFFFF"
-            app:layout_constraintStart_toEndOf="@+id/incorrectPercentageLabel"
+            app:layout_constraintStart_toEndOf="@+id/centerGuideline"
             app:layout_constraintTop_toTopOf="@+id/incorrectPercentageLabel"
             app:layout_constraintBottom_toBottomOf="@+id/incorrectPercentageLabel" />
 
@@ -154,6 +170,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="correct Percentage:"
+            android:textSize="18sp"
             android:textColor="#FFFFFF"
             app:layout_constraintTop_toBottomOf="@+id/incorrectPercentageTextView"
             app:layout_constraintStart_toStartOf="parent" />
@@ -162,8 +179,9 @@
             android:id="@+id/correctPercentageTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="18sp"
             android:textColor="#FFFFFF"
-            app:layout_constraintStart_toEndOf="@+id/correctPercentageLabel"
+            app:layout_constraintStart_toEndOf="@+id/centerGuideline"
             app:layout_constraintTop_toTopOf="@+id/correctPercentageLabel"
             app:layout_constraintBottom_toBottomOf="@+id/correctPercentageLabel" />
 
@@ -174,6 +192,7 @@
             android:layout_height="wrap_content"
             android:text="A Grades:"
             android:textColor="#FFFFFF"
+            android:textSize="18sp"
             app:layout_constraintTop_toBottomOf="@+id/correctPercentageTextView"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -181,8 +200,9 @@
             android:id="@+id/gradeATextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="18sp"
             android:textColor="#FFFFFF"
-            app:layout_constraintStart_toEndOf="@+id/gradeALabel"
+            app:layout_constraintStart_toEndOf="@+id/centerGuideline"
             app:layout_constraintTop_toTopOf="@+id/gradeALabel"
             app:layout_constraintBottom_toBottomOf="@+id/gradeALabel"/>
 
@@ -191,6 +211,7 @@
             android:id="@+id/gradeBLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="18sp"
             android:text="B Grades:"
             android:textColor="#FFFFFF"
             app:layout_constraintTop_toBottomOf="@+id/gradeATextView"
@@ -200,8 +221,9 @@
             android:id="@+id/gradeBTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="18sp"
             android:textColor="#FFFFFF"
-            app:layout_constraintStart_toEndOf="@+id/gradeBLabel"
+            app:layout_constraintStart_toEndOf="@+id/centerGuideline"
             app:layout_constraintTop_toTopOf="@+id/gradeBLabel"
             app:layout_constraintBottom_toBottomOf="@+id/gradeBLabel" />
 
@@ -209,6 +231,7 @@
             android:id="@+id/gradeCLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="18sp"
             android:text="C Grades:"
             android:textColor="#FFFFFF"
             app:layout_constraintTop_toBottomOf="@+id/gradeBTextView"
@@ -219,8 +242,10 @@
             android:id="@+id/gradeCTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:layout_constraintHorizontal_bias="0.5"
+            android:textSize="18sp"
             android:textColor="#FFFFFF"
-            app:layout_constraintStart_toEndOf="@+id/gradeCLabel"
+            app:layout_constraintStart_toEndOf="@+id/centerGuideline"
             app:layout_constraintTop_toTopOf="@+id/gradeCLabel"
             app:layout_constraintBottom_toBottomOf="@+id/gradeCLabel" />
 
