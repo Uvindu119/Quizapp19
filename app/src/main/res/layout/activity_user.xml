@@ -3,7 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/primary"
+
+
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -15,6 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Name:"
+            android:textColor="#FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -25,6 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="User Name"
+            android:textColor="#FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -35,6 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Email:"
+            android:textColor="#FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -45,18 +52,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="User Email"
+            android:textColor="#FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/emailLabel" />
 
-        <!-- Add the TextViews for user statistics -->
 
         <TextView
             android:id="@+id/questionsAnsweredLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Questions Answered:"
+            android:text="Questions:"
+            android:textColor="#FFFFFF"
             app:layout_constraintTop_toBottomOf="@+id/emailTextView"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -64,14 +72,17 @@
             android:id="@+id/questionsAnsweredTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/questionsAnsweredLabel"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:textColor="#FFFFFF"
+            app:layout_constraintStart_toEndOf="@+id/questionsAnsweredLabel"
+            app:layout_constraintTop_toTopOf="@+id/questionsAnsweredLabel"
+            app:layout_constraintBottom_toBottomOf="@+id/questionsAnsweredLabel" />
 
         <TextView
             android:id="@+id/questionsetsAnsweredLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Question Sets Answered:"
+            android:text="Question Sets:"
+            android:textColor="#FFFFFF"
             app:layout_constraintTop_toBottomOf="@+id/questionsAnsweredTextView"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -79,14 +90,17 @@
             android:id="@+id/questionSetsAnsweredTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/questionsetsAnsweredLabel"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:textColor="#FFFFFF"
+            app:layout_constraintStart_toEndOf="@+id/questionsetsAnsweredLabel"
+            app:layout_constraintTop_toTopOf="@+id/questionsetsAnsweredLabel"
+            app:layout_constraintBottom_toBottomOf="@+id/questionsetsAnsweredLabel" />
 
         <TextView
             android:id="@+id/correctAnswersLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Correct Answers:"
+            android:text="Correct:"
+            android:textColor="#FFFFFF"
             app:layout_constraintTop_toBottomOf="@+id/questionSetsAnsweredTextView"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -94,14 +108,17 @@
             android:id="@+id/correctAnswersTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/correctAnswersLabel"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:textColor="#FFFFFF"
+            app:layout_constraintStart_toEndOf="@+id/correctAnswersLabel"
+            app:layout_constraintTop_toTopOf="@+id/correctAnswersLabel"
+            app:layout_constraintBottom_toBottomOf="@+id/correctAnswersLabel" />
 
         <TextView
             android:id="@+id/incorrectAnswersLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Incorrect Answers:"
+            android:text="Incorrect:"
+            android:textColor="#FFFFFF"
             app:layout_constraintTop_toBottomOf="@+id/correctAnswersTextView"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -109,14 +126,17 @@
             android:id="@+id/incorrectAnswersTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/incorrectAnswersLabel"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:textColor="#FFFFFF"
+            app:layout_constraintStart_toEndOf="@+id/incorrectAnswersLabel"
+            app:layout_constraintTop_toTopOf="@+id/incorrectAnswersLabel"
+            app:layout_constraintBottom_toBottomOf="@+id/incorrectAnswersLabel" />
 
         <TextView
             android:id="@+id/incorrectPercentageLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Incorrect Percentage:"
+            android:textColor="#FFFFFF"
             app:layout_constraintTop_toBottomOf="@+id/incorrectAnswersTextView"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -124,15 +144,17 @@
             android:id="@+id/incorrectPercentageTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Incorrect Percentage:"
-            app:layout_constraintTop_toBottomOf="@+id/incorrectPercentageLabel"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:textColor="#FFFFFF"
+            app:layout_constraintStart_toEndOf="@+id/incorrectPercentageLabel"
+            app:layout_constraintTop_toTopOf="@+id/incorrectPercentageLabel"
+            app:layout_constraintBottom_toBottomOf="@+id/incorrectPercentageLabel" />
 
         <TextView
             android:id="@+id/correctPercentageLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="correct Percentage:"
+            android:textColor="#FFFFFF"
             app:layout_constraintTop_toBottomOf="@+id/incorrectPercentageTextView"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -140,48 +162,67 @@
             android:id="@+id/correctPercentageTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="correct Percentage:"
-            app:layout_constraintTop_toBottomOf="@+id/correctPercentageLabel"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:textColor="#FFFFFF"
+            app:layout_constraintStart_toEndOf="@+id/correctPercentageLabel"
+            app:layout_constraintTop_toTopOf="@+id/correctPercentageLabel"
+            app:layout_constraintBottom_toBottomOf="@+id/correctPercentageLabel" />
 
+
+        <TextView
+            android:id="@+id/gradeALabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A Grades:"
+            android:textColor="#FFFFFF"
+            app:layout_constraintTop_toBottomOf="@+id/correctPercentageTextView"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/gradeATextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/correctPercentageTextView"
+            android:textColor="#FFFFFF"
+            app:layout_constraintStart_toEndOf="@+id/gradeALabel"
+            app:layout_constraintTop_toTopOf="@+id/gradeALabel"
+            app:layout_constraintBottom_toBottomOf="@+id/gradeALabel"/>
+
+
+        <TextView
+            android:id="@+id/gradeBLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="B Grades:"
+            android:textColor="#FFFFFF"
+            app:layout_constraintTop_toBottomOf="@+id/gradeATextView"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/gradeBTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/gradeATextView"
+            android:textColor="#FFFFFF"
+            app:layout_constraintStart_toEndOf="@+id/gradeBLabel"
+            app:layout_constraintTop_toTopOf="@+id/gradeBLabel"
+            app:layout_constraintBottom_toBottomOf="@+id/gradeBLabel" />
+
+        <TextView
+            android:id="@+id/gradeCLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="C Grades:"
+            android:textColor="#FFFFFF"
+            app:layout_constraintTop_toBottomOf="@+id/gradeBTextView"
             app:layout_constraintStart_toStartOf="parent" />
+
 
         <TextView
             android:id="@+id/gradeCTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/gradeBTextView"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <TextView
-            android:id="@+id/specializedCategoriesLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Specialized Categories:"
-            app:layout_constraintTop_toBottomOf="@+id/gradeCTextView"
-            app:layout_constraintStart_toStartOf="parent" />
-
-
-
-        <TextView
-            android:id="@+id/specializedCategoriesTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/specializedCategoriesLabel"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:textColor="#FFFFFF"
+            app:layout_constraintStart_toEndOf="@+id/gradeCLabel"
+            app:layout_constraintTop_toTopOf="@+id/gradeCLabel"
+            app:layout_constraintBottom_toBottomOf="@+id/gradeCLabel" />
 
 
         <Button
@@ -193,7 +234,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/specializedCategoriesTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/gradeCTextView" />
 
         <Button
             android:id="@+id/startButton"
