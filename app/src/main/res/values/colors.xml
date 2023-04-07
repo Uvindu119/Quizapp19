@@ -8,7 +8,7 @@
     <color name="error">#B00020</color>
     <color name="onPrimary">#FFFFFF</color>
     <color name="onSecondary">#000000</color>
-    <color name="onSecondaryVariant">#3D3C3C</color>
+    <color name="onSecondaryVariant">#B3ACAC</color>
     <color name="onBackground">#000000</color>
     <color name="onSurface">#000000</color>
     <color name="onError">#FFFFFF</color>

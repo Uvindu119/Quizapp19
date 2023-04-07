@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
+    android:background="@color/primary"
     android:padding="16dp">
 
     <TextView
@@ -11,12 +12,15 @@
         android:layout_height="wrap_content"
         android:text="Register"
         android:textSize="24sp"
+        android:textColor="@color/background"
         android:textStyle="bold" />
 
     <EditText
         android:id="@+id/usernameEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColorHint="@color/onSecondaryVariant"
+        android:textColor="@color/background"
         android:layout_marginTop="16dp"
         android:hint="Username" />
 
@@ -24,7 +28,9 @@
         android:id="@+id/emailEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/background"
         android:inputType="textEmailAddress"
+        android:textColorHint="@color/onSecondaryVariant"
         android:layout_marginTop="16dp"
         android:hint="E-mail" />
 
@@ -32,15 +38,20 @@
         android:id="@+id/passwordEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/background"
         android:layout_marginTop="16dp"
         android:hint="Password"
+        android:textColorHint="@color/onSecondaryVariant"
         android:inputType="textPassword" />
 
     <Button
         android:id="@+id/registerButton"
-        android:layout_width="match_parent"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Register" />
+        android:layout_marginTop="24dp"
+        android:background="@color/primaryVariant"
+        android:text="Register"
+        android:textColor="@color/background"
+        android:textSize="18sp" />
 
 </LinearLayout>
