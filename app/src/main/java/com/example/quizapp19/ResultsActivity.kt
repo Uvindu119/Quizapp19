@@ -42,7 +42,7 @@ class ResultsActivity : AppCompatActivity() {
         scoreTextView.text = getString(R.string.score_text, score, totalQuestions*2)
 
         val grade = when (score) {
-            in 9..totalQuestions  -> {
+            in 9..10  -> {
                 gradeTextView.text = "A"
                 gradeTextView.setTextColor(ContextCompat.getColor(this, R.color.green))
                 "A"
