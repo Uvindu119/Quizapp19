@@ -22,8 +22,16 @@
         <activity android:name=".QuizActivity" />
         <activity android:name=".ResultsActivity" />
         <activity android:name=".CategoryActivity" />
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".LoginActivity" />
+        <activity
+            android:name=".RegisterActivity"
+            android:windowSoftInputMode="adjustResize">
+        </activity>
+
+        <activity
+            android:name=".LoginActivity"
+            android:windowSoftInputMode="adjustResize">
+        </activity>
+
         <activity android:name=".UserActivity" />
     </application>
 
