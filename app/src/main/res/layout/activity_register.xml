@@ -21,6 +21,7 @@
         android:layout_height="wrap_content"
         android:textColorHint="@color/onSecondaryVariant"
         android:textColor="@color/background"
+        android:inputType="text"
         android:layout_marginTop="16dp"
         android:hint="Username" />
 
