@@ -248,6 +248,7 @@ class QuizActivity : AppCompatActivity() {
         intent.putExtra("totalQuestions", questions.size)
         intent.putStringArrayListExtra("incorrectAnswers", incorrectAnswers)
         intent.putExtra("questionSet", questionSet)
+        intent.putExtra("CATEGORY_ID", categoryId)
         intent.putExtra("userId", userId)
         startActivity(intent)
         finish()

@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import android.util.Log
+import kotlin.random.Random
 
 class ResultsActivity : AppCompatActivity() {
     private lateinit var dbHelper: QuizDatabaseHelper
@@ -15,6 +16,7 @@ class ResultsActivity : AppCompatActivity() {
     private lateinit var incorrectAnswersTextView: TextView
     private lateinit var exitButton: Button
     private lateinit var nextPaperButton: Button
+    private val totalQuestionSets = 4
 
 
 
@@ -35,7 +37,7 @@ class ResultsActivity : AppCompatActivity() {
         val correctAnswers = intent.getIntExtra("correctAnswers", 0)
         val totalQuestions = intent.getIntExtra("totalQuestions", 0)
         val incorrectAnswers = intent.getStringArrayListExtra("incorrectAnswers") ?: arrayListOf()
-
+        val categoryId = intent.getIntExtra("CATEGORY_ID", 0)
 
 
         val score = correctAnswers * 2
@@ -97,8 +99,13 @@ class ResultsActivity : AppCompatActivity() {
         nextPaperButton.isEnabled = isQualifiedForNextPaper
         nextPaperButton.setOnClickListener {
             if (isQualifiedForNextPaper) {
-                val intent = Intent(this, QuizActivity::class.java)
-                startActivity(intent)
+                val questionSet = intent.getIntExtra("questionSet", Random.nextInt(1, totalQuestionSets + 1))
+                val nextQuestionSet = (questionSet % totalQuestionSets) + 1
+                val quizIntent = Intent(this, QuizActivity::class.java)
+                quizIntent.putExtra("CATEGORY_ID", categoryId)
+                quizIntent.putExtra("userId", userId)
+                quizIntent.putExtra("questionSet", nextQuestionSet)
+                startActivity(quizIntent)
                 finish()
             }
         }
