@@ -1,17 +1,15 @@
 package com.example.quizapp19
-
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import java.util.*
 import android.util.Log
 
 class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
         private const val DATABASE_NAME = "Quiz.db"
-        private const val DATABASE_VERSION = 57
+        private const val DATABASE_VERSION = 60
 
         private const val TABLE_NAME = "questions"
         private const val COLUMN_ID = "id"
@@ -137,25 +135,30 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         db?.insert(TABLE_NAME, null, contentValues)
     }
 
-    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) { if (oldVersion < 57 && newVersion >= 57) {
+    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) { if (oldVersion < 60 && newVersion >= 60) {
         // Option 1: Drop the table and recreate it
-        val newQuestion = Question("What is the capital of Australia?", listOf("Sydney", "Canberra", "Melbourne", "Brisbane"), "Sydney", "", 3, 3)
+        val newQuestion = Question("What is the capital of Australia?", listOf("Sydney", "Canberra", "Melbourne", "Brisbane"), "Sydney", "", 3, 1)
         addQuestion(db, newQuestion)
+
+
+
     }
     }
 
     private fun insertSampleQuestions(db: SQLiteDatabase?) {
         val sampleQuestions = listOf(
             Question("What is the capital of France?", listOf("Paris", "London", "Rome", "Berlin"), "Paris","",1,1),
-            Question("Book is to Reading as Fork is to:", listOf("drawing", "writing", "stirring", "eating"), "eating","",2,2),
-            Question("What comes next in the sequence: 1, 3, 9, 27, ___.", listOf("71", "73", "81", "83"), "81","android.resource://com.example.quizapp19/drawable/image1",2,2),
+            Question("Book is to Reading as Fork is to:", listOf("drawing", "writing", "stirring", "eating"), "eating","",1,1),
+            Question("What comes next in the sequence: 1, 3, 9, 27, ___.", listOf("71", "73", "81", "83"), "81","android.resource://com.example.quizapp19/drawable/image1",1,1),
             Question("If 4 people can do a work in 40 minutes then 8 people can do the same work in ___ minutes.", listOf("20", "40", "60", "80"), "20","android.resource://com.example.quizapp19/drawable/image1",1,1),
-            Question("Mary is 16 years old. She is 4 times older than her brother. How old will Mary be when she is twice his age? ", listOf("26", "20", "24", "28"), "24","android.resource://com.example.quizapp19/drawable/image1",2,2),
-            Question("Which fraction is the biggest? ", listOf("3/5", "5/8", "1/2 ", "4/7 "), "5/8","",1,1),
-            Question("The store reduces the price of one product by 20 percent. How many percent do you need to raise to the percentage to get the original price? ", listOf("25", "27", "30", "35"), "25","android.resource://com.example.quizapp19/drawable/image1",1,1),
-            Question("There are 5 machines that make 5 parts in 5 minutes. How long does it take to make 100 parts on 100 machines? ", listOf("5", "10", "15", "30"), "5","android.resource://com.example.quizapp19/drawable/image1",2,2),
-            Question("What is the name given to a group of HORSES? ", listOf("husk", "harras", "mute", "rush"), "husk","",1,1),
-            Question("What is a CURRICLE? ", listOf("a vehicle", "a boat", "a curtain", "a vegetable"), "a vehicle","",2,2)
+            Question("Mary is 16 years old. She is 4 times older than her brother. How old will Mary be when she is twice his age? ", listOf("26", "20", "24", "28"), "24","android.resource://com.example.quizapp19/drawable/image1",1,1),
+            Question("Which fraction is the biggest? ", listOf("3/5", "5/8", "1/2 ", "4/7 "), "5/8","",2,1),
+            Question("The store reduces the price of one product by 20 percent. How many percent do you need to raise to the percentage to get the original price? ", listOf("25", "27", "30", "35"), "25","android.resource://com.example.quizapp19/drawable/image1",2,1),
+            Question("There are 5 machines that make 5 parts in 5 minutes. How long does it take to make 100 parts on 100 machines? ", listOf("5", "10", "15", "30"), "5","android.resource://com.example.quizapp19/drawable/image1",2,1),
+            Question("What is the name given to a group of HORSES? ", listOf("husk", "harras", "mute", "rush"), "husk","",2,1),
+            Question("What is a CURRICLE? ", listOf("a vehicle", "a boat", "a curtain", "a vegetable"), "a vehicle","",2,1) ,
+            Question("Which of the following is the capital city of India?", listOf("Sydney", "New Delhi", "Melbourne", "Brisbane"), "New Delhi", "", 4, 1),
+            Question("What is the capital of Australia?", listOf("Sydney", "Canberra", "Melbourne", "Brisbane"), "Sydney", "", 3, 1)
 
         )
 
@@ -335,57 +338,39 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
     fun getQuestionsBySet(setNumber: Int, categoryId: Int): List<Question> {
         val questions = mutableListOf<Question>()
 
-        // Step 1: Get all set numbers for the given category
-        val setNumbers = mutableListOf<Int>()
-        val setCursor = readableDatabase.rawQuery("SELECT DISTINCT $COLUMN_SET_NUMBER FROM $TABLE_NAME WHERE $COLUMN_CATEGORY_ID = $categoryId", null)
-        if (setCursor.moveToFirst()) {
+        val cursor = readableDatabase.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COLUMN_SET_NUMBER = $setNumber AND $COLUMN_CATEGORY_ID = $categoryId", null)
+
+        if (cursor.moveToFirst()) {
             do {
-                val setNumberIndex = setCursor.getColumnIndex(COLUMN_SET_NUMBER)
-                if (setNumberIndex != -1) {
-                    setNumbers.add(setCursor.getInt(setNumberIndex))
+                val questionTextIndex = cursor.getColumnIndex(COLUMN_QUESTION_TEXT)
+                val option1Index = cursor.getColumnIndex(COLUMN_OPTION_1)
+                val option2Index = cursor.getColumnIndex(COLUMN_OPTION_2)
+                val option3Index = cursor.getColumnIndex(COLUMN_OPTION_3)
+                val option4Index = cursor.getColumnIndex(COLUMN_OPTION_4)
+                val correctAnswerIndex = cursor.getColumnIndex(COLUMN_CORRECT_ANSWER)
+                val imagePathIndex = cursor.getColumnIndex(COLUMN_IMAGE_PATH)
+
+                if (questionTextIndex != -1 && option1Index != -1 && option2Index != -1 &&
+                    option3Index != -1 && option4Index != -1 && correctAnswerIndex != -1 && imagePathIndex != -1) {
+
+                    val questionText = cursor.getString(questionTextIndex)
+                    val option1 = cursor.getString(option1Index)
+                    val option2 = cursor.getString(option2Index)
+                    val option3 = cursor.getString(option3Index)
+                    val option4 = cursor.getString(option4Index)
+                    val correctAnswer = cursor.getString(correctAnswerIndex)
+                    val imagePath = cursor.getString(imagePathIndex) // Get image path
+
+                    val question = Question(questionText, listOf(option1, option2, option3, option4), correctAnswer, imagePath, setNumber, categoryId)
+                    questions.add(question)
                 }
-            } while (setCursor.moveToNext())
+            } while (cursor.moveToNext())
         }
-        setCursor.close()
 
-        // Step 2: Shuffle the set numbers
-        setNumbers.shuffle(Random())
-
-        // Step 3: Retrieve the questions for each set in the shuffled list
-        for (shuffledSetNumber in setNumbers) {
-            val cursor = readableDatabase.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COLUMN_SET_NUMBER = $shuffledSetNumber AND $COLUMN_CATEGORY_ID = $categoryId", null)
-
-            if (cursor.moveToFirst()) {
-                do {
-                    val questionTextIndex = cursor.getColumnIndex(COLUMN_QUESTION_TEXT)
-                    val option1Index = cursor.getColumnIndex(COLUMN_OPTION_1)
-                    val option2Index = cursor.getColumnIndex(COLUMN_OPTION_2)
-                    val option3Index = cursor.getColumnIndex(COLUMN_OPTION_3)
-                    val option4Index = cursor.getColumnIndex(COLUMN_OPTION_4)
-                    val correctAnswerIndex = cursor.getColumnIndex(COLUMN_CORRECT_ANSWER)
-                    val imagePathIndex = cursor.getColumnIndex(COLUMN_IMAGE_PATH)
-
-                    if (questionTextIndex != -1 && option1Index != -1 && option2Index != -1 &&
-                        option3Index != -1 && option4Index != -1 && correctAnswerIndex != -1 && imagePathIndex != -1) {
-
-                        val questionText = cursor.getString(questionTextIndex)
-                        val option1 = cursor.getString(option1Index)
-                        val option2 = cursor.getString(option2Index)
-                        val option3 = cursor.getString(option3Index)
-                        val option4 = cursor.getString(option4Index)
-                        val correctAnswer = cursor.getString(correctAnswerIndex)
-                        val imagePath = cursor.getString(imagePathIndex) // Get image path
-
-                        val question = Question(questionText, listOf(option1, option2, option3, option4), correctAnswer, imagePath , setNumber,categoryId)
-                        questions.add(question)
-                    }
-                } while (cursor.moveToNext())
-            }
-
-            cursor.close()
-        }
+        cursor.close()
 
         return questions
     }
+
 
 }
