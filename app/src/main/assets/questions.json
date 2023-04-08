@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "questionText": "What is the capital of France?",
+    "options": ["Paris", "London", "Rome", "Berlin"],
+    "correctAnswer": "Paris",
+    "imagePath": "android.resource://com.example.quizapp19/drawable/image1",
+    "categoryId": 1,
+    "setNumber": 1
+  },
+  {
+    "id": 2,
+    "questionText": "What is the largest planet in our solar system?",
+    "options": ["Earth", "Jupiter", "Saturn", "Mars"],
+    "correctAnswer": "Jupiter",
+    "imagePath": "android.resource://com.example.quizapp19/drawable/image1",
+    "categoryId": 1,
+    "setNumber": 1
+  }
+]

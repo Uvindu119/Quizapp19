@@ -39,7 +39,7 @@ class QuizActivity : AppCompatActivity() {
     private var isQuizFinished = false
     private var scores = 0
     private val answeredQuestions = mutableSetOf<Int>()
-    private val totalQuestionSets = 4
+    private val totalQuestionSets = 1
     private var userId: Int = 0
     private val questionSet = Random.nextInt(1, totalQuestionSets + 1)
 
@@ -207,21 +207,13 @@ class QuizActivity : AppCompatActivity() {
     }
 
     private fun showQuizSummary() {
-        // Cancel the timer to prevent further updates
         quizTimer.cancel()
-
-        // Calculate the total score
         val totalScore = correctAnswers * 2
-
-        // Create a summary message
         val summaryMessage = "Time finished!\nYou scored $totalScore out of ${questions.size*2}."
-
-        // Show an AlertDialog with the summary message and options to restart or exit
         AlertDialog.Builder(this)
             .setTitle("Quiz Summary")
             .setMessage(summaryMessage)
             .setPositiveButton("Restart") { _, _ ->
-                // Restart the quiz
                 currentQuestionIndex = 0
                 correctAnswers = 0
                 totalQuestions = 0
@@ -229,7 +221,6 @@ class QuizActivity : AppCompatActivity() {
                 quizTimer.start()
             }
             .setNegativeButton("Exit") { _, _ ->
-                // Exit the app
                 finish()
             }
             .setCancelable(false)
@@ -237,7 +228,6 @@ class QuizActivity : AppCompatActivity() {
             .show()
     }
     private fun finishQuiz() {
-        // Check if all questions have been answered
         if (totalQuestions < questions.size) {
             Snackbar.make(findViewById(android.R.id.content), "Please answer all questions.", Snackbar.LENGTH_SHORT).show()
             return
@@ -254,6 +244,7 @@ class QuizActivity : AppCompatActivity() {
         finish()
         quizTimer.cancel()
     }
+
 
 }
 

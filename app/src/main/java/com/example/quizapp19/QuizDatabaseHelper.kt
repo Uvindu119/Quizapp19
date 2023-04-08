@@ -5,11 +5,11 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
 
-class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+class QuizDatabaseHelper(private val context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
         private const val DATABASE_NAME = "Quiz.db"
-        private const val DATABASE_VERSION = 60
+        private const val DATABASE_VERSION = 65
 
         private const val TABLE_NAME = "questions"
         private const val COLUMN_ID = "id"
@@ -95,8 +95,9 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         )
     """.trimIndent()
 
+
         db?.execSQL(createCategoriesTableSQL)
-        insertSampleQuestions(db)
+        db?.let { addQuestionsFromJsonIfEmpty(context, it) }
         insertSampleCategories(db)
     }
 
@@ -105,7 +106,7 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         cursor?.let {
             if (it.count == 0) {
                 val sampleCategories = listOf(
-                    Category("General",1,),
+                    Category("General",1),
                     Category("Mathematics",2),
                     Category("Science",3),
                     Category("History",4)
@@ -135,7 +136,7 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         db?.insert(TABLE_NAME, null, contentValues)
     }
 
-    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) { if (oldVersion < 60 && newVersion >= 60) {
+    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) { if (oldVersion < 65 && newVersion >= 65) {
         // Option 1: Drop the table and recreate it
         val newQuestion = Question("What is the capital of Australia?", listOf("Sydney", "Canberra", "Melbourne", "Brisbane"), "Sydney", "", 3, 1)
         addQuestion(db, newQuestion)
@@ -145,38 +146,33 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
     }
     }
 
-    private fun insertSampleQuestions(db: SQLiteDatabase?) {
-        val sampleQuestions = listOf(
-            Question("What is the capital of France?", listOf("Paris", "London", "Rome", "Berlin"), "Paris","",1,1),
-            Question("Book is to Reading as Fork is to:", listOf("drawing", "writing", "stirring", "eating"), "eating","",1,1),
-            Question("What comes next in the sequence: 1, 3, 9, 27, ___.", listOf("71", "73", "81", "83"), "81","android.resource://com.example.quizapp19/drawable/image1",1,1),
-            Question("If 4 people can do a work in 40 minutes then 8 people can do the same work in ___ minutes.", listOf("20", "40", "60", "80"), "20","android.resource://com.example.quizapp19/drawable/image1",1,1),
-            Question("Mary is 16 years old. She is 4 times older than her brother. How old will Mary be when she is twice his age? ", listOf("26", "20", "24", "28"), "24","android.resource://com.example.quizapp19/drawable/image1",1,1),
-            Question("Which fraction is the biggest? ", listOf("3/5", "5/8", "1/2 ", "4/7 "), "5/8","",2,1),
-            Question("The store reduces the price of one product by 20 percent. How many percent do you need to raise to the percentage to get the original price? ", listOf("25", "27", "30", "35"), "25","android.resource://com.example.quizapp19/drawable/image1",2,1),
-            Question("There are 5 machines that make 5 parts in 5 minutes. How long does it take to make 100 parts on 100 machines? ", listOf("5", "10", "15", "30"), "5","android.resource://com.example.quizapp19/drawable/image1",2,1),
-            Question("What is the name given to a group of HORSES? ", listOf("husk", "harras", "mute", "rush"), "husk","",2,1),
-            Question("What is a CURRICLE? ", listOf("a vehicle", "a boat", "a curtain", "a vegetable"), "a vehicle","",2,1) ,
-            Question("Which of the following is the capital city of India?", listOf("Sydney", "New Delhi", "Melbourne", "Brisbane"), "New Delhi", "", 4, 1),
-            Question("What is the capital of Australia?", listOf("Sydney", "Canberra", "Melbourne", "Brisbane"), "Sydney", "", 3, 1)
-
-        )
-
-        sampleQuestions.forEach { question ->
-            val contentValues = ContentValues().apply {
-                put(COLUMN_QUESTION_TEXT, question.questionText)
-                put(COLUMN_OPTION_1, question.options[0])
-                put(COLUMN_OPTION_2, question.options[1])
-                put(COLUMN_OPTION_3, question.options[2])
-                put(COLUMN_OPTION_4, question.options[3])
-                put(COLUMN_CORRECT_ANSWER, question.correctAnswer)
-                put(COLUMN_IMAGE_PATH, question.imagePath)
-                put(COLUMN_SET_NUMBER, question.setNumber)
-                put(COLUMN_CATEGORY_ID, question.categoryId)
+    private fun addQuestionsFromJsonIfEmpty(context: Context, db: SQLiteDatabase) {
+        val cursor = db.rawQuery("SELECT * FROM $TABLE_NAME", null)
+        cursor?.let {
+            if (it.count == 0) {
+                val questions = QuestionUtils.loadQuestions(context, "questions.json")
+                for (question in questions) {
+                    val contentValues = ContentValues()
+                    contentValues.put(COLUMN_QUESTION_TEXT, question.questionText)
+                    contentValues.put(COLUMN_OPTION_1, question.options[0])
+                    contentValues.put(COLUMN_OPTION_2, question.options[1])
+                    contentValues.put(COLUMN_OPTION_3, question.options[2])
+                    contentValues.put(COLUMN_OPTION_4, question.options[3])
+                    contentValues.put(COLUMN_CORRECT_ANSWER, question.correctAnswer)
+                    contentValues.put(COLUMN_IMAGE_PATH, question.imagePath)
+                    contentValues.put(COLUMN_SET_NUMBER, question.setNumber)
+                    contentValues.put(COLUMN_CATEGORY_ID, question.categoryId)
+                    db.insert(TABLE_NAME, null, contentValues)
+                }
             }
-            db?.insert(TABLE_NAME, null, contentValues)
+            it.close()
         }
     }
+
+
+
+
+
     fun getCategories(): List<Category> {
         val categories = mutableListOf<Category>()
         val cursor = readableDatabase.rawQuery("SELECT * FROM $TABLE_CATEGORIES", null)
@@ -359,7 +355,7 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
                     val option3 = cursor.getString(option3Index)
                     val option4 = cursor.getString(option4Index)
                     val correctAnswer = cursor.getString(correctAnswerIndex)
-                    val imagePath = cursor.getString(imagePathIndex) // Get image path
+                    val imagePath = cursor.getString(imagePathIndex)
 
                     val question = Question(questionText, listOf(option1, option2, option3, option4), correctAnswer, imagePath, setNumber, categoryId)
                     questions.add(question)
@@ -371,6 +367,7 @@ class QuizDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
 
         return questions
     }
+
 
 
 }

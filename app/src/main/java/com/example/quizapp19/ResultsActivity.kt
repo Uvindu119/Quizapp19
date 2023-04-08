@@ -113,7 +113,7 @@ class ResultsActivity : AppCompatActivity() {
 
 
         exitButton.setOnClickListener {
-            val intent = Intent(this, UserActivity::class.java)
+            val intent = Intent(this, CategoryActivity::class.java)
             intent.putExtra("userId", userId)
             startActivity(intent)
             finish()
