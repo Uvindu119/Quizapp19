@@ -9,7 +9,7 @@ class QuizDatabaseHelper(private val context: Context) : SQLiteOpenHelper(contex
 
     companion object {
         private const val DATABASE_NAME = "Quiz.db"
-        private const val DATABASE_VERSION = 65
+        private const val DATABASE_VERSION = 66
 
         private const val TABLE_NAME = "questions"
         private const val COLUMN_ID = "id"
@@ -136,7 +136,7 @@ class QuizDatabaseHelper(private val context: Context) : SQLiteOpenHelper(contex
         db?.insert(TABLE_NAME, null, contentValues)
     }
 
-    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) { if (oldVersion < 65 && newVersion >= 65) {
+    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) { if (oldVersion < 66 && newVersion >= 66) {
         // Option 1: Drop the table and recreate it
         val newQuestion = Question("What is the capital of Australia?", listOf("Sydney", "Canberra", "Melbourne", "Brisbane"), "Sydney", "", 3, 1)
         addQuestion(db, newQuestion)

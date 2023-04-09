@@ -63,7 +63,7 @@ class QuizActivity : AppCompatActivity() {
         val dbHelper = QuizDatabaseHelper(this)
         questions = dbHelper.getQuestionsBySet(questionSet, categoryId)
         displayQuestion()
-        quizTimer = QuizTimer(2 * 60, { time ->
+        quizTimer = QuizTimer(5 * 60, { time ->
             timerTextView.text = time
         }, {
             isQuizFinished = true
