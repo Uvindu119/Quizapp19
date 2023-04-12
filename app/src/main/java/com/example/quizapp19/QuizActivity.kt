@@ -39,7 +39,7 @@ class QuizActivity : AppCompatActivity() {
     private var isQuizFinished = false
     private var scores = 0
     private val answeredQuestions = mutableSetOf<Int>()
-    private val totalQuestionSets = 1
+    private val totalQuestionSets = 2
     private var userId: Int = 0
     private val questionSet = Random.nextInt(1, totalQuestionSets + 1)
 
@@ -69,7 +69,6 @@ class QuizActivity : AppCompatActivity() {
             isQuizFinished = true
             if (isActivityActive) {
                 runOnUiThread {
-                    // Handle the end of the quiz
                     showQuizSummary()
                 }
             }

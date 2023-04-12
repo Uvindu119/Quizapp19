@@ -88,5 +88,41 @@
     "imagePath": "",
     "categoryId": 1,
     "setNumber": 1
+  },
+  {
+    "id": 11,
+    "questionText": "What is the name of the famous lighthouse located in Galle, Sri Lanka?",
+    "options": ["Colombo Lighthouse", "Trincomalee Lighthouse", "Galle Lighthouse", "Dondra Head Lighthouse"],
+    "correctAnswer": "Galle Lighthouse",
+    "imagePath": "",
+    "categoryId": 1,
+    "setNumber": 2
+  },
+  {
+    "id": 12,
+    "questionText": "Which of the following is a popular religious site in Sri Lanka known for its golden statue of Lord Buddha?",
+    "options": ["Temple of the Tooth Relic", "Kelaniya Raja Maha Vihara", "Ruwanwelisaya", "Golden Temple of Dambulla"],
+    "correctAnswer": "Golden Temple of Dambulla",
+    "imagePath": "",
+    "categoryId": 1,
+    "setNumber": 2
+  },
+  {
+    "id": 13,
+    "questionText": "What is the name of the famous fort located in the city of Matara, Sri Lanka?",
+    "options": ["Galle Fort", "Matara Fort", "Trincomalee Fort", "Jaffna Fort"],
+    "correctAnswer": "Matara Fort",
+    "imagePath": "",
+    "categoryId": 1,
+    "setNumber": 2
+  },
+  {
+    "id": 14,
+    "questionText": "Which of the following is a popular beach destination in Sri Lanka known for its surf breaks and sunsets?",
+    "options": ["Unawatuna", "Hikkaduwa", "Arugam Bay", "Mirissa"],
+    "correctAnswer": "Mirissa",
+    "imagePath": "",
+    "categoryId": 1,
+    "setNumber": 2
   }
 ]

@@ -1,5 +1,6 @@
 package com.example.quizapp19
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -31,13 +32,21 @@ class UserActivity : AppCompatActivity() {
         Log.d("UserActivity", "User ID: $userId") // Log the user ID
 
         // Set the click listener for the logout button
+        // ...
         logoutButton.setOnClickListener {
+            // Clear the user ID from SharedPreferences
+            val sharedPreferences = getSharedPreferences("QuizAppPrefs", Context.MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
+            editor.putInt("userId", 0)
+            editor.apply()
+
             // Go back to the MainActivity
             val intent = Intent(this, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             startActivity(intent)
             finish()
         }
+// ...
 
         startButton.setOnClickListener {
             val intent = Intent(this, CategoryActivity::class.java)
