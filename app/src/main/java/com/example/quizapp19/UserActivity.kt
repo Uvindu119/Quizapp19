@@ -27,26 +27,22 @@ class UserActivity : AppCompatActivity() {
         nameTextView = findViewById(R.id.nameTextView)
         val logoutButton = findViewById<Button>(R.id.logoutButton)
 
-        // Get user ID from the intent
         userId = intent.getIntExtra("userId", 0)
-        Log.d("UserActivity", "User ID: $userId") // Log the user ID
+        Log.d("UserActivity", "User ID: $userId")
 
-        // Set the click listener for the logout button
-        // ...
         logoutButton.setOnClickListener {
-            // Clear the user ID from SharedPreferences
+
             val sharedPreferences = getSharedPreferences("QuizAppPrefs", Context.MODE_PRIVATE)
             val editor = sharedPreferences.edit()
             editor.putInt("userId", 0)
             editor.apply()
 
-            // Go back to the MainActivity
+
             val intent = Intent(this, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             startActivity(intent)
             finish()
         }
-// ...
 
         startButton.setOnClickListener {
             val intent = Intent(this, CategoryActivity::class.java)
@@ -58,10 +54,9 @@ class UserActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        // Get the user from the database
+
         val user = dbHelper.getUserById(userId)
 
-        // Set the user's name and email
         nameTextView.text = user?.name
         emailTextView.text = user?.email
         correctAnswersTextView.text = user?.correctAnswers.toString()

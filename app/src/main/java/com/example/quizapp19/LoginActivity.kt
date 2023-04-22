@@ -32,12 +32,11 @@ class LoginActivity : AppCompatActivity() {
                     editor.apply()
 
                     val intent = Intent(this, UserActivity::class.java)
-                    intent.putExtra("userId", user.id) // Pass the user's ID to UserActivity
+                    intent.putExtra("userId", user.id)
                     startActivity(intent)
                     finish()
                     showSnackbar("Login successful")
                 } else {
-                    // Login failed
                     showSnackbar(if (user == null) "User not found" else "Incorrect username or password")
                 }
             }

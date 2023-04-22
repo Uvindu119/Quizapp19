@@ -1,4 +1,5 @@
 package com.example.quizapp19
+
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
@@ -9,9 +10,9 @@ class QuizDatabaseHelper(private val context: Context) : SQLiteOpenHelper(contex
 
     companion object {
         private const val DATABASE_NAME = "Quiz.db"
-        private const val DATABASE_VERSION = 67
+        private const val DATABASE_VERSION = 69
 
-        private const val TABLE_NAME = "questions"
+        private const val TABLE_QUESTIONS = "questions"
         private const val COLUMN_ID = "id"
         private const val COLUMN_QUESTION_TEXT = "question_text"
         private const val COLUMN_IMAGE_PATH = "image_path"
@@ -25,7 +26,7 @@ class QuizDatabaseHelper(private val context: Context) : SQLiteOpenHelper(contex
         private const val COLUMN_CATEGORY_ID = "number"
         private const val COLUMN_CATEGORY_NAME = "name"
 
-        private const val TABLE_NAME_USERS = "users"
+        private const val TABLE_USERS = "users"
         private const val COLUMN_USER_ID = "userId"
         private const val COLUMN_USER_NAME = "name"
         private const val COLUMN_USER_EMAIL = "email"
@@ -42,14 +43,11 @@ class QuizDatabaseHelper(private val context: Context) : SQLiteOpenHelper(contex
         private const val COLUMN_GRADE_W = "grade_w"
         private const val COLUMN_SPECIALIZED_CATEGORIES = "specialized_categories"
 
-
-
-
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
         val createTableUsersSQL = """
-    CREATE TABLE $TABLE_NAME_USERS (
+    CREATE TABLE $TABLE_USERS (
     $COLUMN_USER_ID INTEGER PRIMARY KEY AUTOINCREMENT,
     $COLUMN_USER_NAME TEXT,
     $COLUMN_USER_EMAIL TEXT,
@@ -71,7 +69,7 @@ class QuizDatabaseHelper(private val context: Context) : SQLiteOpenHelper(contex
         db?.execSQL(createTableUsersSQL)
 
         val createTableSQL = """
-        CREATE TABLE IF NOT EXISTS $TABLE_NAME (
+        CREATE TABLE IF NOT EXISTS $TABLE_QUESTIONS (
             $COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT,
             $COLUMN_QUESTION_TEXT TEXT,
             $COLUMN_OPTION_1 TEXT,
@@ -133,21 +131,18 @@ class QuizDatabaseHelper(private val context: Context) : SQLiteOpenHelper(contex
             put(COLUMN_SET_NUMBER, question.setNumber)
             put(COLUMN_CATEGORY_ID, question.categoryId)
         }
-        db?.insert(TABLE_NAME, null, contentValues)
+        db?.insert(TABLE_QUESTIONS, null, contentValues)
     }
 
-    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) { if (oldVersion < 67 && newVersion >= 67) {
-        // Option 1: Drop the table and recreate it
+    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) { if (oldVersion < 69 && newVersion >= 69) {
         val newQuestion = Question("What is the capital of Australia?", listOf("Sydney", "Canberra", "Melbourne", "Brisbane"), "Sydney", "", 3, 1)
         addQuestion(db, newQuestion)
-
-
 
     }
     }
 
     private fun addQuestionsFromJsonIfEmpty(context: Context, db: SQLiteDatabase) {
-        val cursor = db.rawQuery("SELECT * FROM $TABLE_NAME", null)
+        val cursor = db.rawQuery("SELECT * FROM $TABLE_QUESTIONS", null)
         cursor?.let {
             if (it.count == 0) {
                 val questions = QuestionUtils.loadQuestions(context, "questions.json")
@@ -162,15 +157,12 @@ class QuizDatabaseHelper(private val context: Context) : SQLiteOpenHelper(contex
                     contentValues.put(COLUMN_IMAGE_PATH, question.imagePath)
                     contentValues.put(COLUMN_SET_NUMBER, question.setNumber)
                     contentValues.put(COLUMN_CATEGORY_ID, question.categoryId)
-                    db.insert(TABLE_NAME, null, contentValues)
+                    db.insert(TABLE_QUESTIONS, null, contentValues)
                 }
             }
             it.close()
         }
     }
-
-
-
 
 
     fun getCategories(): List<Category> {
@@ -181,7 +173,7 @@ class QuizDatabaseHelper(private val context: Context) : SQLiteOpenHelper(contex
                 val idIndex = cursor.getColumnIndex(COLUMN_CATEGORY_ID)
                 val nameIndex = cursor.getColumnIndex(COLUMN_CATEGORY_NAME)
                 if (idIndex != -1 && nameIndex != -1) {
-                    val id = cursor.getString(idIndex).toInt() // Convert id to integer
+                    val id = cursor.getString(idIndex).toInt()
                     val name = cursor.getString(nameIndex)
                     val category = Category(name, id)
                     categories.add(category)
@@ -198,19 +190,19 @@ class QuizDatabaseHelper(private val context: Context) : SQLiteOpenHelper(contex
         values.put(COLUMN_USER_NAME, username)
         values.put(COLUMN_USER_EMAIL, email)
         values.put(COLUMN_USER_PASSWORD, password)
-        values.put(COLUMN_QUESTIONS_ANSWERED, 0) // Initialize questionsAnswered
-        values.put(COLUMN_QUESTIONSETS_ANSWERED, 0) // Initialize questionSetsAnswered
-        values.put(COLUMN_CORRECT_ANSWERS, 0) // Initialize correctAnswers
-        values.put(COLUMN_INCORRECT_ANSWERS, 0) // Initialize incorrectAnswers
-        values.put(COLUMN_CORRECT_PERCENTAGE, 0f) // Initialize correctPercentage
-        values.put(COLUMN_INCORRECT_PERCENTAGE, 0f) // Initialize incorrectPercentage
-        values.put(COLUMN_GRADE_A, 0) // Initialize gradeA
-        values.put(COLUMN_GRADE_B, 0) // Initialize gradeB
-        values.put(COLUMN_GRADE_C, 0) // Initialize gradeC
-        values.put(COLUMN_GRADE_W, 0) // Initialize gradeW
-        values.put(COLUMN_SPECIALIZED_CATEGORIES, "") // Initialize specializedCategories
+        values.put(COLUMN_QUESTIONS_ANSWERED, 0)
+        values.put(COLUMN_QUESTIONSETS_ANSWERED, 0)
+        values.put(COLUMN_CORRECT_ANSWERS, 0)
+        values.put(COLUMN_INCORRECT_ANSWERS, 0)
+        values.put(COLUMN_CORRECT_PERCENTAGE, 0f)
+        values.put(COLUMN_INCORRECT_PERCENTAGE, 0f)
+        values.put(COLUMN_GRADE_A, 0)
+        values.put(COLUMN_GRADE_B, 0)
+        values.put(COLUMN_GRADE_C, 0)
+        values.put(COLUMN_GRADE_W, 0)
+        values.put(COLUMN_SPECIALIZED_CATEGORIES, "")
 
-        val newRowId = db.insert(TABLE_NAME_USERS, null, values)
+        val newRowId = db.insert(TABLE_USERS, null, values)
         return newRowId != -1L
     }
 
@@ -219,7 +211,7 @@ class QuizDatabaseHelper(private val context: Context) : SQLiteOpenHelper(contex
         val selection = "$COLUMN_USER_NAME = ?"
         val selectionArgs = arrayOf(username)
         val cursor = db.query(
-            TABLE_NAME_USERS,
+            TABLE_USERS,
             arrayOf(
                 COLUMN_USER_ID, COLUMN_USER_NAME, COLUMN_USER_EMAIL, COLUMN_USER_PASSWORD,
                 COLUMN_QUESTIONS_ANSWERED, COLUMN_QUESTIONSETS_ANSWERED, COLUMN_CORRECT_ANSWERS,
@@ -291,7 +283,7 @@ class QuizDatabaseHelper(private val context: Context) : SQLiteOpenHelper(contex
         }
 
         Log.d("QuizDatabaseHelper", "Updating user: $user")
-        val result = db.update(TABLE_NAME_USERS, values, "$COLUMN_USER_ID=?", arrayOf(user.id.toString()))
+        val result = db.update(TABLE_USERS, values, "$COLUMN_USER_ID=?", arrayOf(user.id.toString()))
         Log.d("QuizDatabaseHelper", "Rows affected: $result")
     }
 
@@ -299,7 +291,7 @@ class QuizDatabaseHelper(private val context: Context) : SQLiteOpenHelper(contex
         Log.d("QuizDatabaseHelper", "Fetching user with ID: $userId")
         val db = this.readableDatabase
         val cursor = db.query(
-            TABLE_NAME_USERS, arrayOf(COLUMN_USER_ID, COLUMN_USER_NAME, COLUMN_USER_EMAIL, COLUMN_USER_PASSWORD, COLUMN_QUESTIONS_ANSWERED, COLUMN_QUESTIONSETS_ANSWERED, COLUMN_CORRECT_ANSWERS, COLUMN_INCORRECT_ANSWERS, COLUMN_CORRECT_PERCENTAGE, COLUMN_INCORRECT_PERCENTAGE, COLUMN_GRADE_A, COLUMN_GRADE_B, COLUMN_GRADE_C,COLUMN_GRADE_W, COLUMN_SPECIALIZED_CATEGORIES),
+            TABLE_USERS, arrayOf(COLUMN_USER_ID, COLUMN_USER_NAME, COLUMN_USER_EMAIL, COLUMN_USER_PASSWORD, COLUMN_QUESTIONS_ANSWERED, COLUMN_QUESTIONSETS_ANSWERED, COLUMN_CORRECT_ANSWERS, COLUMN_INCORRECT_ANSWERS, COLUMN_CORRECT_PERCENTAGE, COLUMN_INCORRECT_PERCENTAGE, COLUMN_GRADE_A, COLUMN_GRADE_B, COLUMN_GRADE_C,COLUMN_GRADE_W, COLUMN_SPECIALIZED_CATEGORIES),
             "$COLUMN_USER_ID=?", arrayOf(userId.toString()), null, null, null
         )
 
@@ -329,12 +321,10 @@ class QuizDatabaseHelper(private val context: Context) : SQLiteOpenHelper(contex
         return user
     }
 
-
-
     fun getQuestionsBySet(setNumber: Int, categoryId: Int): List<Question> {
         val questions = mutableListOf<Question>()
 
-        val cursor = readableDatabase.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COLUMN_SET_NUMBER = $setNumber AND $COLUMN_CATEGORY_ID = $categoryId", null)
+        val cursor = readableDatabase.rawQuery("SELECT * FROM $TABLE_QUESTIONS WHERE $COLUMN_SET_NUMBER = $setNumber AND $COLUMN_CATEGORY_ID = $categoryId", null)
 
         if (cursor.moveToFirst()) {
             do {
@@ -367,7 +357,5 @@ class QuizDatabaseHelper(private val context: Context) : SQLiteOpenHelper(contex
 
         return questions
     }
-
-
 
 }

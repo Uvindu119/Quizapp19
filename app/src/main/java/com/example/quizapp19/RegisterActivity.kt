@@ -28,7 +28,6 @@ class RegisterActivity : AppCompatActivity() {
                 val existingUser = dbHelper.getUser(username)
 
                 if (existingUser != null) {
-                    // Username already exists
                     Snackbar.make(it, "Username already registered", Snackbar.LENGTH_SHORT).show()
                 } else {
                     if (dbHelper.addUser(username, email, password)) {

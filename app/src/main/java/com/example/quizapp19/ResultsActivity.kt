@@ -68,11 +68,11 @@ class ResultsActivity : AppCompatActivity() {
         val correctPercentage = (correctAnswers.toFloat() / totalQuestions.toFloat()) * 100
         val incorrectPercentage = (incorrectAnswers.size.toFloat() / totalQuestions.toFloat()) * 100
 
-        // Get user information
+
         val user = dbHelper.getUserById(userId)
         Log.d("ResultsActivity", "User before update: $user")
 
-        // Update user statistics
+
         if (user != null) {
             val updatedUser = user.copy(
                 questionsAnswered = user.questionsAnswered + totalQuestions,

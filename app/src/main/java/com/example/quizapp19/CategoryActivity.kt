@@ -80,8 +80,8 @@ class CategoryActivity : AppCompatActivity() {
         return when (categoryId) {
             1 -> R.drawable.category1
             2 -> R.drawable.category2
-            // Add more categories here with their corresponding image resource IDs
-            else -> R.drawable.default_category_image // Set a default image for categories without a specific image
+
+            else -> R.drawable.default_category_image
         }
     }
 
